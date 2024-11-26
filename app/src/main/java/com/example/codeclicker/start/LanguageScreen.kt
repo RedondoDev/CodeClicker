@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeContentPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
@@ -25,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -62,7 +65,12 @@ fun LanguageScreen() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(185.dp)
-                    .padding(15.dp, 8.dp)
+                    .padding(
+                        start = 15.dp,
+                        end = 15.dp,
+                        top = 15.dp,
+                        bottom = 15.dp
+                    )
                     .clip(shape = RoundedCornerShape(30.dp))
                     .border(
                         width = 2.dp,
@@ -112,19 +120,23 @@ fun LanguageScreen() {
                 text = "Nombre",
                 style = TextStyle(
                     fontFamily = quicksandFamily,
-                    fontSize = 22.sp,
+                    fontSize = 24.sp,
                     fontWeight = FontWeight.Normal
                 ),
                 textAlign = TextAlign.Start,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 30.dp)
+                    .padding(
+                        start = 30.dp,
+                        top = 15.dp,
+                        bottom = 15.dp
+                    )
             )
             TextField(
                 value = text,
                 textStyle = TextStyle(
                     fontFamily = quicksandFamily,
-                    fontSize = 22.sp,
+                    fontSize = 20.sp,
                     fontWeight = FontWeight.Normal
                 ),
                 singleLine = true,
@@ -135,10 +147,113 @@ fun LanguageScreen() {
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(58.dp)
-                    .padding(horizontal = 30.dp),
+                    .height(66.dp)
+                    .padding(
+                        start = 30.dp,
+                        end = 30.dp,
+                        bottom = 10.dp
+                    ),
                 onValueChange = { text = it }
             )
+            Text(
+                text = "Lenguaje de Programación",
+                style = TextStyle(
+                    fontFamily = quicksandFamily,
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Normal
+                ),
+                textAlign = TextAlign.Start,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        start = 30.dp,
+                        top = 15.dp,
+                        bottom = 10.dp
+                    )
+            )
+
+            val languageList = listOf("Java", "Kotlin", "Swift", "C", "Python", "JavaScript")
+
+            CardsRows(languageList)
+
         }
+    }
+}
+
+@Composable
+fun CardsRows(languageList: List<String>) {
+
+    var selectedLanguage by rememberSaveable { mutableStateOf<String?>(null) }
+
+    for (i in languageList.indices step 2) {
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(80.dp)
+                .padding(horizontal = 40.dp)
+        ) {
+            LanguageCard(
+                text = languageList[i],
+                isSelected = selectedLanguage == languageList[i],
+                onClick = {
+                    selectedLanguage =
+                        if (selectedLanguage == languageList[i]) null else languageList[i]
+                }
+            )
+            if (i + 1 < languageList.size) {
+                LanguageCard(
+                    text = languageList[i + 1],
+                    isSelected = selectedLanguage == languageList[i + 1],
+                    onClick = {
+                        selectedLanguage =
+                            if (selectedLanguage == languageList[i + 1]) null else languageList[i + 1]
+                    }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun LanguageCard(
+    text: String,
+    isSelected: Boolean,
+    onClick: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .width(130.dp)
+            .height(55.dp)
+            .clip(shape = RoundedCornerShape(15.dp))
+            .border(
+                width = if (isSelected) 4.dp else 2.dp,
+                color = if (isSelected) Color(0xFF3c6391) else Color.Black,
+                shape = RoundedCornerShape(15.dp),
+            )
+            .shadow(
+                elevation = if (isSelected) 4.dp else 2.dp,
+                shape = RoundedCornerShape(15.dp),
+                spotColor = Color.Black
+            )
+            .background(
+                color = Color.White,
+                shape = RoundedCornerShape(15.dp)
+            )
+            .clickable { onClick() }
+    ) {
+        Text(
+            text = text,
+            textAlign = TextAlign.Center,
+            style = TextStyle(
+                fontFamily = quicksandFamily,
+                fontSize = 22.sp,
+                fontWeight = FontWeight.Normal
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.Center)
+        )
     }
 }

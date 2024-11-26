@@ -124,5 +124,4 @@ fun CharacterScreen(modifier: Modifier = Modifier) {
         }
     }
 
-
 }
