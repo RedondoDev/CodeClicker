@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
@@ -44,7 +45,6 @@ import androidx.compose.ui.unit.sp
 import com.example.codeclicker.R
 import com.example.codeclicker.ui.theme.quicksandFamily
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LanguageScreen() {
     Scaffold(
