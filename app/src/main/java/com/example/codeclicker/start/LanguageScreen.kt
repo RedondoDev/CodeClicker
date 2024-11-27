@@ -1,5 +1,6 @@
 package com.example.codeclicker.start
 
+import android.media.MediaPlayer
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -35,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -183,6 +185,8 @@ fun LanguageScreen() {
 @Composable
 fun CardsRows(languageList: List<String>) {
 
+    val context = LocalContext.current
+    val blop = remember { MediaPlayer.create(context, R.raw.blop) }
     var selectedLanguage by rememberSaveable { mutableStateOf<String?>(null) }
 
     for (i in languageList.indices step 2) {
@@ -200,6 +204,11 @@ fun CardsRows(languageList: List<String>) {
                 onClick = {
                     selectedLanguage =
                         if (selectedLanguage == languageList[i]) null else languageList[i]
+                    if (blop.isPlaying) {
+                        blop.stop()
+                        blop.prepare()
+                    }
+                    blop.start()
                 }
             )
             if (i + 1 < languageList.size) {
@@ -209,6 +218,11 @@ fun CardsRows(languageList: List<String>) {
                     onClick = {
                         selectedLanguage =
                             if (selectedLanguage == languageList[i + 1]) null else languageList[i + 1]
+                        if (blop.isPlaying) {
+                            blop.stop()
+                            blop.prepare()
+                        }
+                        blop.start()
                     }
                 )
             }
