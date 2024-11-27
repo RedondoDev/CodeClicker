@@ -1,6 +1,7 @@
 package com.example.codeclicker
 
 import android.app.Activity
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -11,6 +12,9 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.codeclicker.start.CharacterScreen
 import com.example.codeclicker.start.LanguageScreen
 import com.example.codeclicker.ui.theme.CodeClickerTheme
@@ -18,6 +22,7 @@ import com.example.codeclicker.ui.theme.CodeClickerTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        ActivityInfo.SCREEN_ORIENTATION_PORTRAIT.also { requestedOrientation = it };
         setContent {
             CodeClickerTheme {
 
@@ -37,8 +42,23 @@ class MainActivity : ComponentActivity() {
                     }
                 }
 
+                val navController = rememberNavController()
+
+                NavHost(
+                    navController = navController,
+                    startDestination = Routes.CharacterScreen,
+                    builder = {
+                        composable(Routes.CharacterScreen) {
+                            CharacterScreen(navController)
+                        }
+                        composable(Routes.LanguageScreen) {
+                            LanguageScreen(navController)
+                        }
+                    })
+
                 // CharacterScreen()
-                LanguageScreen()
+                // LanguageScreen()
+
             }
         }
     }

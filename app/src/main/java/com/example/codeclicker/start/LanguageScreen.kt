@@ -44,14 +44,21 @@ import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.codeclicker.R
+import com.example.codeclicker.Routes
 import com.example.codeclicker.ui.theme.quicksandFamily
 
 @Composable
-fun LanguageScreen() {
+fun LanguageScreen(navController: NavController) {
     Scaffold(
         topBar = { TopBar("Selección de Personaje") },
-        bottomBar = { BottomBar() }
+        bottomBar = {
+            BottomBar(
+                navController = navController,
+                onClickBack = { navController.navigate(Routes.CharacterScreen) },
+                onClickContinue = { /* navController.navigate("GameScreen")*/ })
+        }
     ) { innerPadding ->
         Column(
             verticalArrangement = Arrangement.Center,
@@ -66,7 +73,7 @@ fun LanguageScreen() {
                 horizontalArrangement = Arrangement.SpaceAround,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(185.dp)
+                    .height(200.dp)
                     .padding(
                         start = 15.dp,
                         end = 15.dp,
@@ -130,7 +137,7 @@ fun LanguageScreen() {
                     .fillMaxWidth()
                     .padding(
                         start = 30.dp,
-                        top = 15.dp,
+                        top = 5.dp,
                         bottom = 15.dp
                     )
             )
@@ -202,8 +209,10 @@ fun CardsRows(languageList: List<String>) {
                 text = languageList[i],
                 isSelected = selectedLanguage == languageList[i],
                 onClick = {
-                    selectedLanguage =
-                        if (selectedLanguage == languageList[i]) null else languageList[i]
+                    if (selectedLanguage != languageList[i]) {
+                        selectedLanguage =
+                            if (selectedLanguage == languageList[i]) null else languageList[i]
+                    }
                     if (blop.isPlaying) {
                         blop.stop()
                         blop.prepare()
@@ -216,8 +225,10 @@ fun CardsRows(languageList: List<String>) {
                     text = languageList[i + 1],
                     isSelected = selectedLanguage == languageList[i + 1],
                     onClick = {
-                        selectedLanguage =
-                            if (selectedLanguage == languageList[i + 1]) null else languageList[i + 1]
+                        if (selectedLanguage != languageList[i + 1]) {
+                            selectedLanguage =
+                                if (selectedLanguage == languageList[i + 1]) null else languageList[i + 1]
+                        }
                         if (blop.isPlaying) {
                             blop.stop()
                             blop.prepare()

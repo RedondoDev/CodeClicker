@@ -33,11 +33,13 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.codeclicker.R
+import com.example.codeclicker.Routes
 import com.example.codeclicker.ui.theme.quicksandFamily
 
 @Composable
-fun CharacterScreen(modifier: Modifier = Modifier) {
+fun CharacterScreen(navController: NavController, modifier: Modifier = Modifier) {
 
     val context = LocalContext.current
     val blop = remember { MediaPlayer.create(context, R.raw.blop) }
@@ -64,7 +66,12 @@ fun CharacterScreen(modifier: Modifier = Modifier) {
 
     Scaffold(
         topBar = { TopBar("Selección de Personaje") },
-        bottomBar = { BottomBar() }
+        bottomBar = {
+            BottomBar(
+                navController = navController,
+                onClickBack = { /* Cerrar app */ },
+                onClickContinue = { navController.navigate(Routes.LanguageScreen) })
+        }
     ) { innerPadding ->
         LazyColumn(
             modifier = modifier

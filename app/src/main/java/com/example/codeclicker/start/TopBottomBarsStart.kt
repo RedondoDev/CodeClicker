@@ -26,6 +26,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.codeclicker.R
 import com.example.codeclicker.ui.theme.quicksandFamily
 import com.google.android.gms.wallet.button.ButtonConstants
@@ -54,7 +55,7 @@ fun TopBar(text: String) {
 }
 
 @Composable
-fun BottomBar() {
+fun BottomBar(navController: NavController, onClickBack: () -> Unit, onClickContinue: () -> Unit) {
     NavigationBar(
         containerColor = Color(0xFF3c6391)
     ) {
@@ -63,8 +64,8 @@ fun BottomBar() {
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
-            BottomBarButton("Atrás", onClick = { })
-            BottomBarButton("Continuar", onClick = { })
+            BottomBarButton("Atrás", onClick = { onClickBack() })
+            BottomBarButton("Continuar", onClick = { onClickContinue() })
         }
     }
 }
@@ -82,6 +83,7 @@ fun BottomBarButton(text: String, onClick: () -> Unit) {
                 spacebar.prepare()
             }
             spacebar.start()
+            onClick()
         },
         colors = ButtonDefaults.buttonColors(Color.White),
         modifier = Modifier
