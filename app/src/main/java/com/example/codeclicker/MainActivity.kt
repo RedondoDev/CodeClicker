@@ -51,13 +51,13 @@ class MainActivity : ComponentActivity() {
                         composable(Routes.CharacterScreen) {
                             CharacterScreen(navController)
                         }
-                        composable(Routes.LanguageScreen) {
-                            LanguageScreen(navController)
+                        composable("${Routes.LanguageScreen}/{selectedCharacterIndex}") {
+                            val selectedCharacterIndex =
+                                it.arguments?.getString("selectedCharacterIndex")?.toInt() ?: 0
+                            LanguageScreen(navController, selectedCharacterIndex)
                         }
-                    })
-
-                // CharacterScreen()
-                // LanguageScreen()
+                    }
+                )
 
             }
         }

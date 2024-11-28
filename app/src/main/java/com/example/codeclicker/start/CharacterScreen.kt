@@ -1,5 +1,6 @@
 package com.example.codeclicker.start
 
+import android.app.Activity
 import android.media.MediaPlayer
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -67,10 +68,15 @@ fun CharacterScreen(navController: NavController, modifier: Modifier = Modifier)
     Scaffold(
         topBar = { TopBar("Selección de Personaje") },
         bottomBar = {
+            val activity = (LocalContext.current as? Activity)
             BottomBar(
+                text1 = "Salir",
+                text2 = "Continuar",
                 navController = navController,
-                onClickBack = { /* Cerrar app */ },
-                onClickContinue = { navController.navigate(Routes.LanguageScreen) })
+                onClickBack = { activity?.finish() },
+                onClickContinue = {
+                    navController.navigate("${Routes.LanguageScreen}/$selectedCharacterIndex")
+                })
         }
     ) { innerPadding ->
         LazyColumn(

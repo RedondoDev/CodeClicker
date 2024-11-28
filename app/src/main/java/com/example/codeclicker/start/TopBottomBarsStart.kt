@@ -55,7 +55,13 @@ fun TopBar(text: String) {
 }
 
 @Composable
-fun BottomBar(navController: NavController, onClickBack: () -> Unit, onClickContinue: () -> Unit) {
+fun BottomBar(
+    text1: String,
+    text2: String,
+    navController: NavController,
+    onClickBack: () -> Unit,
+    onClickContinue: () -> Unit
+) {
     NavigationBar(
         containerColor = Color(0xFF3c6391)
     ) {
@@ -64,8 +70,8 @@ fun BottomBar(navController: NavController, onClickBack: () -> Unit, onClickCont
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
-            BottomBarButton("Atrás", onClick = { onClickBack() })
-            BottomBarButton("Continuar", onClick = { onClickContinue() })
+            BottomBarButton(text1, onClick = { onClickBack() })
+            BottomBarButton(text2, onClick = { onClickContinue() })
         }
     }
 }

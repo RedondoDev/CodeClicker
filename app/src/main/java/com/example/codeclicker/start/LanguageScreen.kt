@@ -1,6 +1,8 @@
 package com.example.codeclicker.start
 
+import android.app.Activity
 import android.media.MediaPlayer
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -27,6 +29,7 @@ import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -50,14 +53,47 @@ import com.example.codeclicker.Routes
 import com.example.codeclicker.ui.theme.quicksandFamily
 
 @Composable
-fun LanguageScreen(navController: NavController) {
+fun LanguageScreen(navController: NavController, selectedCharacterIndex: Int) {
+
+    val imageList: List<Int> = listOf(
+        R.drawable.uno,
+        R.drawable.dos,
+        R.drawable.tres,
+        R.drawable.cuatro,
+        R.drawable.cinco,
+        R.drawable.seis,
+        R.drawable.siete,
+        R.drawable.ocho
+    )
+
+    val charactersList = listOf(
+        CharacterData(0, painterResource(imageList[0]), painterResource(imageList[1])),
+        CharacterData(1, painterResource(imageList[2]), painterResource(imageList[3])),
+        CharacterData(2, painterResource(imageList[4]), painterResource(imageList[5])),
+        CharacterData(3, painterResource(imageList[6]), painterResource(imageList[7]))
+    )
+
+    val charac = charactersList[selectedCharacterIndex]
+    var text by remember { mutableStateOf("") }
+    val context = LocalContext.current
+
     Scaffold(
         topBar = { TopBar("Selección de Personaje") },
         bottomBar = {
             BottomBar(
+                text1 = "Atrás",
+                text2 = "Finalizar",
                 navController = navController,
                 onClickBack = { navController.navigate(Routes.CharacterScreen) },
-                onClickContinue = { /* navController.navigate("GameScreen")*/ })
+                onClickContinue = {
+                    if (text.isEmpty()) {
+                        Toast.makeText(context, "Introduce tu nombre", Toast.LENGTH_SHORT).show()
+                    } else {
+                        // Comprobación de nombre
+                        // Crear en la BD
+                        navController.navigate(Routes.CharacterScreen)
+                    }
+                })
         }
     ) { innerPadding ->
         Column(
@@ -96,16 +132,6 @@ fun LanguageScreen(navController: NavController) {
                         shape = RoundedCornerShape(30.dp)
                     )
             ) {
-                val imageList: List<Int> = listOf(
-                    R.drawable.uno,
-                    R.drawable.dos,
-                )
-
-                val charactersList = listOf(
-                    CharacterData(0, painterResource(imageList[0]), painterResource(imageList[1])),
-                )
-
-                val charac = charactersList[0]
 
                 Image(
                     painter = charac.image1,
@@ -122,8 +148,6 @@ fun LanguageScreen(navController: NavController) {
                         .clip(shape = RoundedCornerShape(30.dp))
                 )
             }
-
-            var text by remember { mutableStateOf("") }
 
             Text(
                 text = "Nombre",
@@ -194,7 +218,7 @@ fun CardsRows(languageList: List<String>) {
 
     val context = LocalContext.current
     val blop = remember { MediaPlayer.create(context, R.raw.blop) }
-    var selectedLanguage by rememberSaveable { mutableStateOf<String?>(null) }
+    var selectedLanguage by rememberSaveable { mutableStateOf<String?>(languageList[0]) }
 
     for (i in languageList.indices step 2) {
         Row(
