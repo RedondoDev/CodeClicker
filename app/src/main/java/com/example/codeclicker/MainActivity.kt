@@ -15,6 +15,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.codeclicker.load.SplashScreen
 import com.example.codeclicker.start.CharacterScreen
 import com.example.codeclicker.start.LanguageScreen
 import com.example.codeclicker.ui.theme.CodeClickerTheme
@@ -46,8 +47,11 @@ class MainActivity : ComponentActivity() {
 
                 NavHost(
                     navController = navController,
-                    startDestination = Routes.CharacterScreen,
+                    startDestination = Routes.SplashScreen,
                     builder = {
+                        composable(Routes.SplashScreen) {
+                            SplashScreen(navController)
+                        }
                         composable(Routes.CharacterScreen) {
                             CharacterScreen(navController)
                         }

@@ -91,7 +91,7 @@ fun LanguageScreen(navController: NavController, selectedCharacterIndex: Int) {
                     } else {
                         // Comprobación de nombre
                         // Crear en la BD
-                        navController.navigate(Routes.CharacterScreen)
+                        navController.navigate(Routes.CharacterScreen) // ClickerScreen
                     }
                 })
         }
@@ -131,6 +131,7 @@ fun LanguageScreen(navController: NavController, selectedCharacterIndex: Int) {
                         color = Color.White,
                         shape = RoundedCornerShape(30.dp)
                     )
+                    .clickable { navController.navigate(Routes.CharacterScreen) }
             ) {
 
                 Image(
