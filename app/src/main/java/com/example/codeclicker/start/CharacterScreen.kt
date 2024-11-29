@@ -85,7 +85,7 @@ fun CharacterScreen(navController: NavController, modifier: Modifier = Modifier)
                 .fillMaxSize()
                 .background(Color(0xffcbd8e8))
         ) {
-            items(4) { index ->
+            items(charactersList.size) { index ->
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceAround,

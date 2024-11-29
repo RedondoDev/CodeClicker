@@ -75,6 +75,7 @@ fun LanguageScreen(navController: NavController, selectedCharacterIndex: Int) {
     val charac = charactersList[selectedCharacterIndex]
     var text by remember { mutableStateOf("") }
     val context = LocalContext.current
+    var currentToast by remember { mutableStateOf<Toast?>(null) }
 
     Scaffold(
         topBar = { TopBar("Selección de Personaje") },
@@ -86,13 +87,19 @@ fun LanguageScreen(navController: NavController, selectedCharacterIndex: Int) {
                 onClickBack = { navController.navigate(Routes.CharacterScreen) },
                 onClickContinue = {
                     if (text.isEmpty()) {
-                        Toast.makeText(context, "Introduce tu nombre", Toast.LENGTH_SHORT).show()
+                        currentToast?.cancel()
+                        currentToast =
+                            Toast.makeText(context, "Introduce tu nombre", Toast.LENGTH_SHORT)
+                        currentToast?.show()
                     } else {
                         // Comprobación de nombre
                         // Crear en la BD
 
                         // Crear el YourCharacter para pasar los datos
-                        navController.navigate(Routes.ClickerScreen) // ClickerScreen
+                        navController.navigate(Routes.ClickerScreen) {
+                            // Para que no funcione el volver atrás del sistema
+                            popUpTo(Routes.CharacterScreen) { inclusive = true }
+                        }
                     }
                 })
         }

@@ -6,9 +6,11 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -29,7 +31,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             CodeClickerTheme {
 
-                val showSystemUi by remember { mutableStateOf(false) }
+                val showSystemUi by rememberSaveable { mutableStateOf(false) }
                 val view = LocalView.current
                 val window = (view.context as Activity).window
                 val insetsController = WindowCompat.getInsetsController(window, view)
@@ -75,7 +77,7 @@ class MainActivity : ComponentActivity() {
     override fun onResume() {
         super.onResume()
         // Guardar el Time
-        // Cargar el Time en el onCreate
+        // Cargar el Time en el onResume
     }
 }
 
