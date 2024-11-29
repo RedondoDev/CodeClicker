@@ -3,6 +3,7 @@ package com.example.codeclicker
 import android.app.Activity
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.getValue
@@ -65,6 +66,12 @@ class MainActivity : ComponentActivity() {
 
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Guardar el Time
+        // Cargar el Time en el onCreate
     }
 }
 
