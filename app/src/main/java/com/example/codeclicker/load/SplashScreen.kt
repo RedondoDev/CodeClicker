@@ -1,6 +1,8 @@
 package com.example.codeclicker.load
 
 import android.window.SplashScreen
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,6 +15,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -23,6 +26,7 @@ import kotlinx.coroutines.delay
 @Composable
 fun SplashScreen(navController: NavHostController) {
 
+    val splashDuration = 3000
     var registered by rememberSaveable { mutableStateOf(false) }
 
     LaunchedEffect(key1 = true) {
@@ -35,16 +39,26 @@ fun SplashScreen(navController: NavHostController) {
         }
     }
 
-    Splash()
+    Splash(splashDuration)
 }
 
 @Composable
-fun Splash() {
+fun Splash(splashDuration: Int) {
+    var animated by rememberSaveable { mutableStateOf(false) }
+    val alpha: Float by animateFloatAsState(
+        targetValue = if (animated) 1f else 0f,
+        animationSpec = tween(durationMillis = splashDuration),
+        label = "alpha"
+    )
+    LaunchedEffect(Unit) {
+        animated = true
+    }
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
             .fillMaxSize()
+            .alpha(alpha)
     ) {
         Image(
             painter = painterResource(R.drawable.logo),

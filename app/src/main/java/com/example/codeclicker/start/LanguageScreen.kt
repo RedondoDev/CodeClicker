@@ -43,7 +43,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -91,7 +90,9 @@ fun LanguageScreen(navController: NavController, selectedCharacterIndex: Int) {
                     } else {
                         // Comprobación de nombre
                         // Crear en la BD
-                        navController.navigate(Routes.CharacterScreen) // ClickerScreen
+
+                        // Crear el YourCharacter para pasar los datos
+                        navController.navigate(Routes.ClickerScreen) // ClickerScreen
                     }
                 })
         }

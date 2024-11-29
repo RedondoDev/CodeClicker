@@ -16,6 +16,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.codeclicker.game.ClickerScreen
 import com.example.codeclicker.load.SplashScreen
 import com.example.codeclicker.start.CharacterScreen
 import com.example.codeclicker.start.LanguageScreen
@@ -60,6 +61,9 @@ class MainActivity : ComponentActivity() {
                             val selectedCharacterIndex =
                                 it.arguments?.getString("selectedCharacterIndex")?.toInt() ?: 0
                             LanguageScreen(navController, selectedCharacterIndex)
+                        }
+                        composable(Routes.ClickerScreen) {
+                            ClickerScreen(navController)
                         }
                     }
                 )
