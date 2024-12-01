@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -31,22 +32,6 @@ class MainActivity : ComponentActivity() {
         setContent {
             CodeClickerTheme {
 
-                val showSystemUi by rememberSaveable { mutableStateOf(false) }
-                val view = LocalView.current
-                val window = (view.context as Activity).window
-                val insetsController = WindowCompat.getInsetsController(window, view)
-                if (!view.isInEditMode) {
-                    if (!showSystemUi) {
-                        insetsController.apply {
-                            hide(WindowInsetsCompat.Type.systemBars())
-                            systemBarsBehavior =
-                                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-                        }
-                    } else {
-                        insetsController.apply { show(WindowInsetsCompat.Type.systemBars()) }
-                    }
-                }
-
                 val navController = rememberNavController()
 
                 NavHost(
@@ -64,8 +49,11 @@ class MainActivity : ComponentActivity() {
                                 it.arguments?.getString("selectedCharacterIndex")?.toInt() ?: 0
                             LanguageScreen(navController, selectedCharacterIndex)
                         }
-                        composable(Routes.ClickerScreen) {
-                            ClickerScreen(navController)
+                        composable("${Routes.ClickerScreen}/{charac}/{text}/{selectedLanguage}") { backStackEntry ->
+                            val charac = backStackEntry.arguments?.getString("charac") ?: ""
+                            val text = backStackEntry.arguments?.getString("text") ?: ""
+                            val selectedLanguage = backStackEntry.arguments?.getString("selectedLanguage") ?: ""
+                            ClickerScreen(navController, charac, text, selectedLanguage)
                         }
                     }
                 )
@@ -78,6 +66,16 @@ class MainActivity : ComponentActivity() {
         super.onResume()
         // Guardar el Time
         // Cargar el Time en el onResume
+        hideSystemUi()
     }
-}
 
+    private fun hideSystemUi() {
+        val view = window.decorView
+        val insetsController = WindowCompat.getInsetsController(window, view)
+        insetsController.apply {
+            hide(WindowInsetsCompat.Type.systemBars())
+            systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        }
+    }
+
+}

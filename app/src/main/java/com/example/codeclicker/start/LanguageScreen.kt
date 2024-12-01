@@ -74,6 +74,7 @@ fun LanguageScreen(navController: NavController, selectedCharacterIndex: Int) {
 
     val charac = charactersList[selectedCharacterIndex]
     var text by remember { mutableStateOf("") }
+    var selectedLanguage by rememberSaveable { mutableStateOf<String?>("Java") }
     val context = LocalContext.current
     var currentToast by remember { mutableStateOf<Toast?>(null) }
 
@@ -96,8 +97,8 @@ fun LanguageScreen(navController: NavController, selectedCharacterIndex: Int) {
                         // Crear en la BD
 
                         // Crear el YourCharacter para pasar los datos
-                        navController.navigate(Routes.ClickerScreen) {
-                            // Para que no funcione el volver atrás del sistema
+                        navController.popBackStack(Routes.SplashScreen, inclusive = true)
+                        navController.navigate("${Routes.ClickerScreen}/${selectedCharacterIndex}/${text}/${selectedLanguage}") {
                             popUpTo(Routes.CharacterScreen) { inclusive = true }
                         }
                     }
@@ -216,18 +217,16 @@ fun LanguageScreen(navController: NavController, selectedCharacterIndex: Int) {
 
             val languageList = listOf("Java", "Kotlin", "Swift", "C", "Python", "JavaScript")
 
-            CardsRows(languageList)
+            CardsRows(languageList, selectedLanguage) { selectedLanguage = it }
 
         }
     }
 }
 
 @Composable
-fun CardsRows(languageList: List<String>) {
-
+fun CardsRows(languageList: List<String>, selectedLanguage: String?, onLanguageSelected: (String) -> Unit) {
     val context = LocalContext.current
     val blop = remember { MediaPlayer.create(context, R.raw.blop) }
-    var selectedLanguage by rememberSaveable { mutableStateOf<String?>(languageList[0]) }
 
     for (i in languageList.indices step 2) {
         Row(
@@ -242,10 +241,7 @@ fun CardsRows(languageList: List<String>) {
                 text = languageList[i],
                 isSelected = selectedLanguage == languageList[i],
                 onClick = {
-                    if (selectedLanguage != languageList[i]) {
-                        selectedLanguage =
-                            if (selectedLanguage == languageList[i]) null else languageList[i]
-                    }
+                    onLanguageSelected(languageList[i])
                     if (blop.isPlaying) {
                         blop.stop()
                         blop.prepare()
@@ -258,10 +254,7 @@ fun CardsRows(languageList: List<String>) {
                     text = languageList[i + 1],
                     isSelected = selectedLanguage == languageList[i + 1],
                     onClick = {
-                        if (selectedLanguage != languageList[i + 1]) {
-                            selectedLanguage =
-                                if (selectedLanguage == languageList[i + 1]) null else languageList[i + 1]
-                        }
+                        onLanguageSelected(languageList[i + 1])
                         if (blop.isPlaying) {
                             blop.stop()
                             blop.prepare()

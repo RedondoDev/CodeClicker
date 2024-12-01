@@ -8,15 +8,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
+import com.example.codeclicker.start.YourCharacter
 
 @Composable
-fun ClickerScreen(navController: NavController) {
-    // Para probar
+fun ClickerScreen(
+    navController: NavController,
+    charac: String,
+    text: String,
+    selectedLanguage: String
+) {
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
         modifier = Modifier.fillMaxSize()
     ) {
-        Text("Click")
+        Text("$charac, $text, $selectedLanguage")
+
     }
 }
