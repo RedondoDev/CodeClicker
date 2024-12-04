@@ -98,7 +98,7 @@ fun LanguageScreen(navController: NavController, selectedCharacterIndex: Int) {
 
                         // Crear el YourCharacter para pasar los datos
                         navController.popBackStack(Routes.SplashScreen, inclusive = true)
-                        navController.navigate("${Routes.ClickerScreen}/${selectedCharacterIndex}/${text}/${selectedLanguage}") {
+                        navController.navigate("${Routes.NavigationGame}/${selectedCharacterIndex}/${text}/${selectedLanguage}") {
                             popUpTo(Routes.CharacterScreen) { inclusive = true }
                         }
                     }
