@@ -46,7 +46,7 @@ fun NavigationGame(
 
         NavHost(
             navController = navController,
-            startDestination = Routes.RankingScreen,
+            startDestination = Routes.ClickerScreen,
             builder = {
                 composable(Routes.GithubScreen) {
                     GithubScreen()
@@ -72,7 +72,7 @@ fun BottomBar2(navController: NavController) {
         NavItem(icono = painterResource(R.drawable.dos), label = "Ranking")
     )
 
-    var selectedIndex by rememberSaveable { mutableIntStateOf(0) }
+    var selectedIndex by rememberSaveable { mutableIntStateOf(1) }
 
     NavigationBar(
         containerColor = Color(0xFF3c6391)

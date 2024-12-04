@@ -50,7 +50,11 @@ fun ClickerScreen(
 
     val yourCharacter = YourCharacter(charac, text, selectedLanguage)
 
-    Column() {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxSize()
+    ) {
         Text("Clicker")
     }
 
