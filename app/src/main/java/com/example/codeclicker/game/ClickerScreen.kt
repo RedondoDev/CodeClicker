@@ -79,6 +79,8 @@ fun ClickerScreen(yourCharacter: YourCharacter) {
     var clics by rememberSaveable { mutableIntStateOf(yourCharacter.clics) }
     val progress = yourCharacter.clics.toFloat()
 
+    var money by rememberSaveable { mutableIntStateOf(yourCharacter.money) }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -221,20 +223,21 @@ fun ClickerScreen(yourCharacter: YourCharacter) {
                 .align(Alignment.BottomCenter)
                 .width(320.dp)
                 .height(320.dp)
+                .bounceClick()
                 .clickable {
                     clics++
                     yourCharacter.clics = clics
+                    money++
+                    yourCharacter.money = money
+                    println("Clicks: ${yourCharacter.clics} y $clics y Money: ${yourCharacter.money} y $money")
                     // Meter funcionamiento barra
-                    // Que sume clics
-                    // Que sume dinero
                 }
         ) {
             Image(
-                painter = junior, // Cambiar foto cuando llegue a X clics
+                painter = if (yourCharacter.money < 10) junior else senior, // Cambiar foto cuando llegue a X clics
                 "Junior Clicker",
                 modifier = Modifier
                     .fillMaxSize()
-                    .bounceClick()
             )
         }
 

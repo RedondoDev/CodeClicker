@@ -5,6 +5,6 @@ data class YourCharacter(
     val name: String,
     val language: String,
     var clics: Int,
-    val money: Int,
+    var money: Int,
     var copilot: Boolean
 )
