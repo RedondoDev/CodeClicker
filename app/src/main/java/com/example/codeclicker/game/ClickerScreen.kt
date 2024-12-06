@@ -1,18 +1,27 @@
 package com.example.codeclicker.game
 
-import android.app.Activity
 import android.widget.Toast
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -24,16 +33,19 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.codeclicker.R
-import com.example.codeclicker.Routes
-import com.example.codeclicker.start.BottomBar
 import com.example.codeclicker.start.CharacterData
-import com.example.codeclicker.start.TopBar
 import com.example.codeclicker.start.YourCharacter
+import com.example.codeclicker.ui.theme.quicksandFamily
 
 @Composable
 fun ClickerScreen(yourCharacter: YourCharacter) {
@@ -60,10 +72,21 @@ fun ClickerScreen(yourCharacter: YourCharacter) {
     var currentToast by remember { mutableStateOf<Toast?>(null) }
     val context = LocalContext.current
 
+    val junior = charactersList[yourCharacter.selectedCharacterIndex].image1
+    val senior = charactersList[yourCharacter.selectedCharacterIndex].image2
+
+    var clics by rememberSaveable { mutableIntStateOf(yourCharacter.clics) }
+    val progress = yourCharacter.clics.toFloat()
+
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(10.dp)
+            .padding(
+                start = 10.dp,
+                top = 10.dp,
+                end = 5.dp,
+                bottom = 10.dp
+            )
     ) {
         Box(
             contentAlignment = Alignment.Center,
@@ -89,14 +112,14 @@ fun ClickerScreen(yourCharacter: YourCharacter) {
             Icon(
                 painterResource(R.drawable.copilot),
                 "",
-                tint = Color.Black,
+                tint = if (!unlocked) Color.Gray else Color.Black,
                 modifier = Modifier.padding(5.dp)
             )
             if (!unlocked) {
                 Icon(
                     painterResource(R.drawable.diagonal_roja),
                     "",
-                    tint = Color.Red,
+                    tint = if (!unlocked) Color(0xFFC56D6D) else Color.Red,
                     modifier = Modifier.padding(
                         start = 8.dp, bottom = 8.dp,
                         top = 10.dp, end = 10.dp
@@ -104,7 +127,98 @@ fun ClickerScreen(yourCharacter: YourCharacter) {
                 )
             }
         }
-    }
-}
 
+        Column(
+            verticalArrangement = Arrangement.SpaceBetween,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .width(70.dp)
+                .height(270.dp)
+                .align(Alignment.TopEnd)
+                .padding(top = 10.dp)
+                .clickable { // Mover al muñeco
+                    clics++
+                    yourCharacter.clics = clics
+                }
+        ) {
+            Image(
+                painter = senior,
+                contentDescription = "Senior",
+                modifier = Modifier
+                    .width(64.dp)
+                    .padding(end = 5.dp)
+            )
+            Column(
+                modifier = Modifier
+                    .width(12.dp)
+                    .weight(1f)
+                    .padding(top = 10.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .border(
+                        1.dp,
+                        Color.Black,
+                        RoundedCornerShape(12.dp)
+                    )
+            ) {
+                Box(
+                    modifier = Modifier
+                        .weight(0.5f)
+                        .fillMaxWidth()
+                )
+                Box(
+                    modifier = Modifier
+                        .weight(0.5f)
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(
+                            Color(0xffcbd8e8)
+                        )
+                        .border(
+                            1.dp,
+                            Color.Black,
+                            RoundedCornerShape(12.dp)
+                        )
+                )
+            }
+            Image(
+                painter = junior,
+                contentDescription = "Junior",
+                modifier = Modifier
+                    .width(60.dp)
+            )
+
+        }
+
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .width(200.dp)
+                .height(70.dp)
+                .padding(6.dp)
+                .align(Alignment.TopCenter)
+        ) {
+            Image(
+                painterResource(R.drawable.coin),
+                "Coin",
+                modifier = Modifier
+                    .size(25.dp)
+                    .padding(
+                        top = 1.dp,
+                        end = 5.dp
+                    )
+            )
+            Text(
+                "${yourCharacter.money}€",
+                style = TextStyle(
+                    fontFamily = quicksandFamily,
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.Normal
+                ),
+            )
+        }
+
+    }
+
+}
 

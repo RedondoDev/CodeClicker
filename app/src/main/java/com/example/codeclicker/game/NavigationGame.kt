@@ -42,12 +42,11 @@ import com.example.codeclicker.start.YourCharacter
 
 @Composable
 fun NavigationGame(
-    charac: Int,
+    selectedCharacterIndex: Int,
     text: String,
     selectedLanguage: String
 ) {
-
-    val yourCharacter = YourCharacter(charac, text, selectedLanguage, 0, false)
+    val yourCharacter = YourCharacter(selectedCharacterIndex, text, selectedLanguage, 1,0, false)
 
     val navController = rememberNavController()
 

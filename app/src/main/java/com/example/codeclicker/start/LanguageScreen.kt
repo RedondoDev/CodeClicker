@@ -96,9 +96,8 @@ fun LanguageScreen(navController: NavController, selectedCharacterIndex: Int) {
                         // Comprobación de nombre
                         // Crear en la BD
 
-                        // Crear el YourCharacter para pasar los datos
                         navController.popBackStack(Routes.SplashScreen, inclusive = true)
-                        navController.navigate("${Routes.NavigationGame}/${selectedCharacterIndex}/${text}/${selectedLanguage}") {
+                        navController.navigate("${Routes.NavigationGame}/$selectedCharacterIndex/$text/$selectedLanguage") {
                             popUpTo(Routes.CharacterScreen) { inclusive = true }
                         }
                     }
@@ -224,7 +223,11 @@ fun LanguageScreen(navController: NavController, selectedCharacterIndex: Int) {
 }
 
 @Composable
-fun CardsRows(languageList: List<String>, selectedLanguage: String?, onLanguageSelected: (String) -> Unit) {
+fun CardsRows(
+    languageList: List<String>,
+    selectedLanguage: String?,
+    onLanguageSelected: (String) -> Unit
+) {
     val context = LocalContext.current
     val blop = remember { MediaPlayer.create(context, R.raw.blop) }
 
