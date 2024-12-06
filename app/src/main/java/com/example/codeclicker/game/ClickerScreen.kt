@@ -49,6 +49,7 @@ import com.example.codeclicker.R
 import com.example.codeclicker.start.CharacterData
 import com.example.codeclicker.start.YourCharacter
 import com.example.codeclicker.ui.theme.quicksandFamily
+import kotlin.random.Random
 
 @Composable
 fun ClickerScreen(yourCharacter: YourCharacter) {
@@ -69,6 +70,19 @@ fun ClickerScreen(yourCharacter: YourCharacter) {
         CharacterData(1, painterResource(imageList[2]), painterResource(imageList[3])),
         CharacterData(2, painterResource(imageList[4]), painterResource(imageList[5])),
         CharacterData(3, painterResource(imageList[6]), painterResource(imageList[7]))
+    )
+
+    val javaLanguage = ProgrammingLanguageList(
+        lines = listOf(
+            "public static void main;",
+            "int[] nums = new int[5];",
+            "if (nombre.contains(\"a\"));",
+            "abstract class Usuario",
+        ),
+        errorLines = listOf(
+            "publif stat",
+            "ic vod main"
+        )
     )
 
     val unlocked by rememberSaveable { mutableStateOf(yourCharacter.copilot) }
@@ -234,6 +248,26 @@ fun ClickerScreen(yourCharacter: YourCharacter) {
         }
 
         val interactionSource = remember { MutableInteractionSource() }
+        var randomLineIndex by remember { mutableIntStateOf(Random.nextInt(4)) }
+        var randomFontSize by remember { mutableIntStateOf(Random.nextInt(12, 22)) }
+        var lines by remember { mutableStateOf(javaLanguage.lines[randomLineIndex]) }
+
+        Box(
+            contentAlignment = Alignment.BottomCenter,
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .width(320.dp)
+                .height(365.dp)
+        ) {
+            Text( // Hacer que cada vez que das clic se muestren más texts hasta un límite
+                lines,
+                style = TextStyle(
+                    fontFamily = quicksandFamily,
+                    fontSize = randomFontSize.sp,
+                    fontWeight = FontWeight.Normal
+                )
+            )
+        }
 
         Box(
             contentAlignment = Alignment.BottomCenter,
@@ -249,17 +283,22 @@ fun ClickerScreen(yourCharacter: YourCharacter) {
                         yourCharacter.clics = clics
                         money++
                         yourCharacter.money = money
-                        println("Clicks: ${yourCharacter.clics} y $clics y Money: ${yourCharacter.money} y $money")
+
+                        randomLineIndex = Random.nextInt(4)
+                        lines = javaLanguage.lines[randomLineIndex]
+
+                        randomFontSize = Random.nextInt(12, 22)
                     }
                 )
         ) {
             Image(
                 painter = if (yourCharacter.money < 10) junior else senior, // Cambiar cantidad de clics
-                "Junior Clicker",
+                "Junior/Senior Image",
                 modifier = Modifier
                     .fillMaxSize()
             )
         }
+
 
     }
 
