@@ -36,6 +36,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -92,9 +93,7 @@ fun ClickerScreen(yourCharacter: YourCharacter) {
             contentAlignment = Alignment.Center,
             modifier = Modifier
                 .size(70.dp)
-                .align(
-                    Alignment.TopStart
-                )
+                .align(Alignment.TopStart)
                 .padding(6.dp)
                 .clip(CircleShape)
                 .clickable {
@@ -121,8 +120,10 @@ fun ClickerScreen(yourCharacter: YourCharacter) {
                     "",
                     tint = if (!unlocked) Color(0xFFC56D6D) else Color.Red,
                     modifier = Modifier.padding(
-                        start = 8.dp, bottom = 8.dp,
-                        top = 10.dp, end = 10.dp
+                        start = 8.dp,
+                        bottom = 8.dp,
+                        top = 10.dp,
+                        end = 10.dp
                     )
                 )
             }
@@ -136,10 +137,6 @@ fun ClickerScreen(yourCharacter: YourCharacter) {
                 .height(270.dp)
                 .align(Alignment.TopEnd)
                 .padding(top = 10.dp)
-                .clickable { // Mover al muñeco
-                    clics++
-                    yourCharacter.clics = clics
-                }
         ) {
             Image(
                 painter = senior,
@@ -215,6 +212,29 @@ fun ClickerScreen(yourCharacter: YourCharacter) {
                     fontSize = 22.sp,
                     fontWeight = FontWeight.Normal
                 ),
+            )
+        }
+
+        Box(
+            contentAlignment = Alignment.BottomCenter,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .width(320.dp)
+                .height(320.dp)
+                .clickable {
+                    clics++
+                    yourCharacter.clics = clics
+                    // Meter funcionamiento barra
+                    // Que sume clics
+                    // Que sume dinero
+                }
+        ) {
+            Image(
+                painter = junior, // Cambiar foto cuando llegue a X clics
+                "Junior Clicker",
+                modifier = Modifier
+                    .fillMaxSize()
+                    .bounceClick()
             )
         }
 
