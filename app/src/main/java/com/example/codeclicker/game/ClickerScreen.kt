@@ -78,7 +78,7 @@ fun ClickerScreen(yourCharacter: YourCharacter) {
     val junior = charactersList[yourCharacter.selectedCharacterIndex].image1
     val senior = charactersList[yourCharacter.selectedCharacterIndex].image2
 
-    var clics by rememberSaveable { mutableIntStateOf(yourCharacter.clics) }
+    var clics by rememberSaveable { mutableIntStateOf(yourCharacter.clics - 1) }
 
     val progress = yourCharacter.clics.toFloat()
     val mProgress = animateFloatAsState(progress / 10) // Cambiar cantidad de clics
