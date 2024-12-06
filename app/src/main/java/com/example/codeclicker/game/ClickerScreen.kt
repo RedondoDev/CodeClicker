@@ -6,6 +6,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,6 +33,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Brush
@@ -77,7 +79,11 @@ fun ClickerScreen(yourCharacter: YourCharacter) {
     val senior = charactersList[yourCharacter.selectedCharacterIndex].image2
 
     var clics by rememberSaveable { mutableIntStateOf(yourCharacter.clics) }
+
     val progress = yourCharacter.clics.toFloat()
+    val mProgress = animateFloatAsState(progress / 10) // Cambiar cantidad de clics
+    val evolved by rememberSaveable { mutableStateOf(false) }
+
 
     var money by rememberSaveable { mutableIntStateOf(yourCharacter.money) }
 
@@ -161,12 +167,22 @@ fun ClickerScreen(yourCharacter: YourCharacter) {
             ) {
                 Box(
                     modifier = Modifier
-                        .weight(0.5f)
+                        .weight(
+                            if (!evolved) {
+                                (if ((1.0 - mProgress.value) <= 0.0) {
+                                    0.0001f
+                                } else {
+                                    1 - mProgress.value
+                                })
+                            } else {
+                                1f
+                            }
+                        )
                         .fillMaxWidth()
                 )
                 Box(
                     modifier = Modifier
-                        .weight(0.5f)
+                        .weight(mProgress.value)
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(12.dp))
                         .background(
@@ -217,6 +233,8 @@ fun ClickerScreen(yourCharacter: YourCharacter) {
             )
         }
 
+        val interactionSource = remember { MutableInteractionSource() }
+
         Box(
             contentAlignment = Alignment.BottomCenter,
             modifier = Modifier
@@ -224,17 +242,19 @@ fun ClickerScreen(yourCharacter: YourCharacter) {
                 .width(320.dp)
                 .height(320.dp)
                 .bounceClick()
-                .clickable {
-                    clics++
-                    yourCharacter.clics = clics
-                    money++
-                    yourCharacter.money = money
-                    println("Clicks: ${yourCharacter.clics} y $clics y Money: ${yourCharacter.money} y $money")
-                    // Meter funcionamiento barra
-                }
+                .clickableWithoutRipple(
+                    interactionSource = interactionSource,
+                    onClick = {
+                        clics++
+                        yourCharacter.clics = clics
+                        money++
+                        yourCharacter.money = money
+                        println("Clicks: ${yourCharacter.clics} y $clics y Money: ${yourCharacter.money} y $money")
+                    }
+                )
         ) {
             Image(
-                painter = if (yourCharacter.money < 10) junior else senior, // Cambiar foto cuando llegue a X clics
+                painter = if (yourCharacter.money < 10) junior else senior, // Cambiar cantidad de clics
                 "Junior Clicker",
                 modifier = Modifier
                     .fillMaxSize()
@@ -244,4 +264,19 @@ fun ClickerScreen(yourCharacter: YourCharacter) {
     }
 
 }
+
+fun Modifier.clickableWithoutRipple(
+    interactionSource: MutableInteractionSource,
+    onClick: () -> Unit
+) = composed(
+    factory = {
+        this.then(
+            Modifier.clickable(
+                interactionSource = interactionSource,
+                indication = null,
+                onClick = { onClick() }
+            )
+        )
+    }
+)
 
