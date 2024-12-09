@@ -1,7 +1,9 @@
 package com.example.codeclicker.game
 
 import android.widget.Toast
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -16,6 +18,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -34,6 +37,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Brush
@@ -49,6 +53,8 @@ import com.example.codeclicker.R
 import com.example.codeclicker.start.CharacterData
 import com.example.codeclicker.start.YourCharacter
 import com.example.codeclicker.ui.theme.quicksandFamily
+import kotlinx.coroutines.delay
+import java.util.LinkedList
 import kotlin.random.Random
 
 @Composable
@@ -91,15 +97,13 @@ fun ClickerScreen(yourCharacter: YourCharacter) {
 
     val junior = charactersList[yourCharacter.selectedCharacterIndex].image1
     val senior = charactersList[yourCharacter.selectedCharacterIndex].image2
-
-    var clics by rememberSaveable { mutableIntStateOf(yourCharacter.clics - 1) }
-
-    val progress = yourCharacter.clics.toFloat()
-    val mProgress = animateFloatAsState(progress / 10) // Cambiar cantidad de clics
     val evolved by rememberSaveable { mutableStateOf(false) }
 
-
+    var clics by rememberSaveable { mutableIntStateOf(yourCharacter.clics - 1) }
     var money by rememberSaveable { mutableIntStateOf(yourCharacter.money) }
+
+    val progress = yourCharacter.clics.toFloat()
+    val mProgress = animateFloatAsState(progress / 100) // Cambiar cantidad de clics
 
     Box(
         modifier = Modifier
@@ -250,23 +254,47 @@ fun ClickerScreen(yourCharacter: YourCharacter) {
         val interactionSource = remember { MutableInteractionSource() }
         var randomLineIndex by remember { mutableIntStateOf(Random.nextInt(4)) }
         var randomFontSize by remember { mutableIntStateOf(Random.nextInt(12, 22)) }
-        var lines by remember { mutableStateOf(javaLanguage.lines[randomLineIndex]) }
+        var line by remember { mutableStateOf(javaLanguage.lines[randomLineIndex]) }
+
+        val lineList by rememberSaveable { mutableStateOf(LinkedList<CodeLine>()) }
+        var initialX = 0
 
         Box(
-            contentAlignment = Alignment.BottomCenter,
+            contentAlignment = Alignment.BottomStart,
             modifier = Modifier
                 .align(Alignment.TopCenter)
-                .width(320.dp)
+                .fillMaxWidth()
                 .height(365.dp)
         ) {
-            Text( // Hacer que cada vez que das clic se muestren más texts hasta un límite
-                lines,
-                style = TextStyle(
-                    fontFamily = quicksandFamily,
-                    fontSize = randomFontSize.sp,
-                    fontWeight = FontWeight.Normal
+            for (line in lineList) {
+                var enabled by remember { mutableStateOf(false) }
+                val paddingAnimation by animateDpAsState(
+                    if (enabled) 250.dp else 0.dp,
+                    animationSpec = tween(2000),
+                    label = "Padding"
                 )
-            )
+                val alphaAnimation by animateFloatAsState(
+                    if (enabled) 0f else 1f,
+                    animationSpec = tween(2000),
+                    label = "alpha"
+                )
+                Text(
+                    text = line.text,
+                    style = TextStyle(
+                        fontFamily = quicksandFamily,
+                        fontSize = line.size.sp,
+                        fontWeight = FontWeight.Normal
+                    ),
+                    modifier = Modifier
+                        .align(alignment = Alignment.BottomCenter)
+                        .offset(
+                            x = line.initialX.dp,
+                            y = -paddingAnimation
+                        )
+                        .alpha(alpha = alphaAnimation)
+                )
+                enabled = true
+            }
         }
 
         Box(
@@ -285,20 +313,22 @@ fun ClickerScreen(yourCharacter: YourCharacter) {
                         yourCharacter.money = money
 
                         randomLineIndex = Random.nextInt(4)
-                        lines = javaLanguage.lines[randomLineIndex]
-
+                        line = javaLanguage.lines[randomLineIndex]
                         randomFontSize = Random.nextInt(12, 22)
+                        initialX = (-100..100).random()
+
+                        lineList.add(CodeLine(line, randomFontSize, initialX))
+
                     }
                 )
         ) {
             Image(
-                painter = if (yourCharacter.money < 10) junior else senior, // Cambiar cantidad de clics
+                painter = if (yourCharacter.money < 100) junior else senior, // Cambiar cantidad de clics
                 "Junior/Senior Image",
                 modifier = Modifier
                     .fillMaxSize()
             )
         }
-
 
     }
 
