@@ -3,6 +3,7 @@ package com.example.codeclicker.game
 import android.widget.Toast
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -43,6 +44,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -84,6 +86,16 @@ fun ClickerScreen(yourCharacter: YourCharacter) {
             "int[] nums = new int[5];",
             "if (nombre.contains(\"a\"));",
             "abstract class Usuario",
+            "interface Drawable { void draw(); }",
+            "String mensaje = \"Hola Mundo!\";",
+            "public class Cliente extends Persona { }",
+            "Map<String, Integer> mapa = new HashMap<>();",
+            "try { throw new IOException(); }",
+            "List<Integer> num = Arrays.asList(1,2,3);",
+            "Runnable r = () -> System.out.println(\"Play\");",
+            "System.out.printf(\"Resultado: %.2f\", res);",
+            "int resultado = Math.max(a, b);",
+            "Path ruta = Paths.get(\"archivo.txt\");"
         ),
         errorLines = listOf(
             "publif stat",
@@ -103,7 +115,25 @@ fun ClickerScreen(yourCharacter: YourCharacter) {
     var money by rememberSaveable { mutableIntStateOf(yourCharacter.money) }
 
     val progress = yourCharacter.clics.toFloat()
-    val mProgress = animateFloatAsState(progress / 100) // Cambiar cantidad de clics
+    val mProgress = animateFloatAsState(progress / 10) // Cambiar cantidad de clics
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(
+                start = 10.dp,
+                end = 10.dp
+            )
+    ) {
+        Image(
+            painter = painterResource(R.drawable.casa),
+            "Room image",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter)
+        )
+    }
 
     Box(
         modifier = Modifier
@@ -252,12 +282,11 @@ fun ClickerScreen(yourCharacter: YourCharacter) {
         }
 
         val interactionSource = remember { MutableInteractionSource() }
-        var randomLineIndex by remember { mutableIntStateOf(Random.nextInt(4)) }
+        var randomLineIndex by remember { mutableIntStateOf(0) }
         var randomFontSize by remember { mutableIntStateOf(Random.nextInt(12, 22)) }
         var line by remember { mutableStateOf(javaLanguage.lines[randomLineIndex]) }
 
         val lineList by rememberSaveable { mutableStateOf(LinkedList<CodeLine>()) }
-        var initialX = 0
 
         Box(
             contentAlignment = Alignment.BottomStart,
@@ -278,11 +307,16 @@ fun ClickerScreen(yourCharacter: YourCharacter) {
                     animationSpec = tween(2000),
                     label = "alpha"
                 )
+                val fontSizeAnimation by animateFloatAsState(
+                    (if (enabled) line.size else 0).toFloat(),
+                    animationSpec = tween(200),
+                    label = "Padding"
+                )
                 Text(
                     text = line.text,
                     style = TextStyle(
                         fontFamily = quicksandFamily,
-                        fontSize = line.size.sp,
+                        fontSize = fontSizeAnimation.sp,
                         fontWeight = FontWeight.Normal
                     ),
                     modifier = Modifier
@@ -297,12 +331,19 @@ fun ClickerScreen(yourCharacter: YourCharacter) {
             }
         }
 
+
         Box(
             contentAlignment = Alignment.BottomCenter,
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .width(320.dp)
                 .height(320.dp)
+                .padding(
+                    top = 70.dp,
+                    start = 40.dp,
+                    end = 40.dp,
+                    bottom = 0.dp
+                )
                 .bounceClick()
                 .clickableWithoutRipple(
                     interactionSource = interactionSource,
@@ -312,18 +353,19 @@ fun ClickerScreen(yourCharacter: YourCharacter) {
                         money++
                         yourCharacter.money = money
 
-                        randomLineIndex = Random.nextInt(4)
+                        randomLineIndex = Random.nextInt(javaLanguage.lines.size)
                         line = javaLanguage.lines[randomLineIndex]
                         randomFontSize = Random.nextInt(12, 22)
-                        initialX = (-100..100).random()
+                        val initialX = (-100..100).random()
 
                         lineList.add(CodeLine(line, randomFontSize, initialX))
 
                     }
                 )
         ) {
+
             Image(
-                painter = if (yourCharacter.money < 100) junior else senior, // Cambiar cantidad de clics
+                painter = if (yourCharacter.money < 10) junior else senior, // Cambiar cantidad de clics
                 "Junior/Senior Image",
                 modifier = Modifier
                     .fillMaxSize()
