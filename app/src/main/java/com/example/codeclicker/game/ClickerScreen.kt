@@ -80,28 +80,6 @@ fun ClickerScreen(yourCharacter: YourCharacter) {
         CharacterData(3, painterResource(imageList[6]), painterResource(imageList[7]))
     )
 
-    val javaLanguage = ProgrammingLanguageList(
-        lines = listOf(
-            "public static void main;",
-            "int[] nums = new int[5];",
-            "if (nombre.contains(\"a\"));",
-            "abstract class Usuario",
-            "interface Drawable { void draw(); }",
-            "String mensaje = \"Hola Mundo!\";",
-            "public class Cliente extends Persona { }",
-            "Map<String, Integer> mapa = new HashMap<>();",
-            "try { throw new IOException(); }",
-            "List<Integer> num = Arrays.asList(1,2,3);",
-            "Runnable r = () -> System.out.println(\"Play\");",
-            "System.out.printf(\"Resultado: %.2f\", res);",
-            "int resultado = Math.max(a, b);",
-            "Path ruta = Paths.get(\"archivo.txt\");"
-        ),
-        errorLines = listOf(
-            "publif stat",
-            "ic vod main"
-        )
-    )
 
     val unlocked by rememberSaveable { mutableStateOf(yourCharacter.copilot) }
     var currentToast by remember { mutableStateOf<Toast?>(null) }
@@ -115,7 +93,8 @@ fun ClickerScreen(yourCharacter: YourCharacter) {
     var money by rememberSaveable { mutableIntStateOf(yourCharacter.money) }
 
     val progress = yourCharacter.clics.toFloat()
-    val mProgress = animateFloatAsState(progress / 10) // Cambiar cantidad de clics
+    val mProgress =
+        animateFloatAsState(progress / 100, label = "Progreso") // Cambiar cantidad de clics
 
     Box(
         modifier = Modifier
@@ -299,12 +278,12 @@ fun ClickerScreen(yourCharacter: YourCharacter) {
                 var enabled by remember { mutableStateOf(false) }
                 val paddingAnimation by animateDpAsState(
                     if (enabled) 250.dp else 0.dp,
-                    animationSpec = tween(2000),
+                    animationSpec = tween(3000),
                     label = "Padding"
                 )
                 val alphaAnimation by animateFloatAsState(
                     if (enabled) 0f else 1f,
-                    animationSpec = tween(2000),
+                    animationSpec = tween(3000),
                     label = "alpha"
                 )
                 val fontSizeAnimation by animateFloatAsState(
@@ -353,9 +332,25 @@ fun ClickerScreen(yourCharacter: YourCharacter) {
                         money++
                         yourCharacter.money = money
 
-                        randomLineIndex = Random.nextInt(javaLanguage.lines.size)
-                        line = javaLanguage.lines[randomLineIndex]
-                        randomFontSize = Random.nextInt(12, 22)
+                        randomLineIndex = when (yourCharacter.language) {
+                            "Java" -> Random.nextInt(javaLanguage.lines.size)
+                            "Kotlin" -> Random.nextInt(kotlinLanguage.lines.size)
+                            "Swift" -> Random.nextInt(swiftLanguage.lines.size)
+                            "C" -> Random.nextInt(cLanguage.lines.size)
+                            "Python" -> Random.nextInt(pythonLanguage.lines.size)
+                            else -> Random.nextInt(javascriptLanguage.lines.size)
+                        }
+
+                        line = when (yourCharacter.language) {
+                            "Java" -> javaLanguage.lines[randomLineIndex]
+                            "Kotlin" -> kotlinLanguage.lines[randomLineIndex]
+                            "Swift" -> swiftLanguage.lines[randomLineIndex]
+                            "C" -> cLanguage.lines[randomLineIndex]
+                            "Python" -> pythonLanguage.lines[randomLineIndex]
+                            else -> javascriptLanguage.lines[randomLineIndex]
+                        }
+
+                        randomFontSize = Random.nextInt(12, 20)
                         val initialX = (-100..100).random()
 
                         lineList.add(CodeLine(line, randomFontSize, initialX))
@@ -365,7 +360,7 @@ fun ClickerScreen(yourCharacter: YourCharacter) {
         ) {
 
             Image(
-                painter = if (yourCharacter.money < 10) junior else senior, // Cambiar cantidad de clics
+                painter = if (yourCharacter.money < 100) junior else senior, // Cambiar cantidad de clics
                 "Junior/Senior Image",
                 modifier = Modifier
                     .fillMaxSize()
