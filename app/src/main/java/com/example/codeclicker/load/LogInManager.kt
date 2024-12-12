@@ -16,10 +16,16 @@ import kotlinx.coroutines.tasks.await
 import java.security.MessageDigest
 import java.util.UUID
 
+data class Registered(
+    val userId: String,
+    val created: Boolean
+)
+
 class LogInManager(private val activity: Activity) {
 
     val credentialManager = CredentialManager.create(activity)
     val auth = Firebase.auth
+    val userId = auth.currentUser?.uid
 
     fun getCredentialOptions(requestJson: String) {
         val getPasswordOption = GetPasswordOption()
@@ -29,8 +35,8 @@ class LogInManager(private val activity: Activity) {
         )
     }
 
-    suspend fun signInGoogle(): Boolean {
-        return try {
+    suspend fun signInGoogle(): Registered? {
+        try {
             val ranNonce: String = UUID.randomUUID().toString()
             val bytes: ByteArray = ranNonce.toByteArray()
             val md: MessageDigest = MessageDigest.getInstance("SHA-256")
@@ -57,18 +63,24 @@ class LogInManager(private val activity: Activity) {
                     GoogleAuthProvider.getCredential(googleIdTokenCredential.idToken, null)
 
                 val a = auth.signInWithCredential(authCredential).await()
-//                if (a.additionalUserInfo?.isNewUser == true) {
-//                    Database(auth.currentUser!!).createUserData()
-//                }
+                println("SignInWithCredential:success")
+
+                if (a.additionalUserInfo?.isNewUser == true) {
+                    println("FALSO")
+                    return userId?.let { Registered(userId = it, created = false) }
+                } else if (a.additionalUserInfo?.isNewUser == false) {
+                    println("VERDADERO")
+                    return userId?.let { Registered(userId = it, created = true) }
+                }
+
             } else {
                 println("Error")
             }
 
-            auth.currentUser?.let { true } ?: false
-
         } catch (e: Exception) {
             e.printStackTrace()
-            false
         }
+        println("ADIÓS")
+        return null
     }
 }

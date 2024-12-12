@@ -33,27 +33,31 @@ import kotlinx.coroutines.launch
 fun SplashScreen(navController: NavHostController) {
 
     val splashDuration = 3000
-    var registered by rememberSaveable { mutableStateOf(false) }
+    var registered: Registered?
     val context = LocalContext.current
     val manager = LogInManager(context as ComponentActivity)
+
+    Splash(splashDuration)
 
     LaunchedEffect(key1 = true) {
         delay(3000)
         navController.popBackStack()
         registered = manager.signInGoogle()
 
-        if (!registered) {
+        if (registered == null) {
             context.finish()
         } else {
-            // Si tienes personaje
-                //navController.navigate(Routes.CharacterScreen)
-            // Si no tienes personaje
+            if (registered!!.created){
+                navController.navigate("${Routes.NavigationGame}/1/registrado/java")
+                println("YA ESTÁ CREADO, A JUGAR")
+            } else {
             // Hacer Log In
-                navController.navigate("${Routes.NavigationGame}/1/test/java")
+                navController.navigate(Routes.CharacterScreen)
+                println("AÚN NO ESTÁ CREADO, A CREAR")
+            }
         }
     }
 
-    Splash(splashDuration)
 }
 
 @Composable
