@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "533319591506",
+    "project_id": "codeclicker-4970e",
+    "storage_bucket": "codeclicker-4970e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:533319591506:android:a2caae6324caae52dfe18b",
+        "android_client_info": {
+          "package_name": "com.example.codeclicker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "533319591506-9g1jkja0oe2aj6e05deqjuvk8ta995e4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.codeclicker",
+            "certificate_hash": "5f49f8c7c3a00d6ae6c6b4ed12b14335a56ea507"
+          }
+        },
+        {
+          "client_id": "533319591506-i20u2itrlhuvh6vc877qa3qejhfhv2sc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBu8dtvVFLkZXu0IpBjLJiS9roTLebSgyA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "533319591506-i20u2itrlhuvh6vc877qa3qejhfhv2sc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

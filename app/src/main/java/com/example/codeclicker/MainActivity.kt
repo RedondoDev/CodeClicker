@@ -4,6 +4,7 @@ import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -12,10 +13,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.codeclicker.game.ClickerScreen
 import com.example.codeclicker.game.NavigationGame
+import com.example.codeclicker.load.LogInManager
 import com.example.codeclicker.load.SplashScreen
 import com.example.codeclicker.start.CharacterScreen
 import com.example.codeclicker.start.LanguageScreen
 import com.example.codeclicker.ui.theme.CodeClickerTheme
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
