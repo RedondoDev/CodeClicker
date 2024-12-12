@@ -33,20 +33,23 @@ import kotlinx.coroutines.launch
 fun SplashScreen(navController: NavHostController) {
 
     val splashDuration = 3000
-    var onDB by rememberSaveable { mutableStateOf(false) }
+    var registered by rememberSaveable { mutableStateOf(false) }
     val context = LocalContext.current
     val manager = LogInManager(context as ComponentActivity)
 
     LaunchedEffect(key1 = true) {
         delay(3000)
         navController.popBackStack()
-        onDB = manager.signInGoogle()
+        registered = manager.signInGoogle()
 
-        if (!onDB) {
-            navController.navigate(Routes.CharacterScreen)
+        if (!registered) {
+            context.finish()
         } else {
+            // Si tienes personaje
+                //navController.navigate(Routes.CharacterScreen)
+            // Si no tienes personaje
             // Hacer Log In
-            navController.navigate("${Routes.NavigationGame}/1/test/java")
+                navController.navigate("${Routes.NavigationGame}/1/test/java")
         }
     }
 
