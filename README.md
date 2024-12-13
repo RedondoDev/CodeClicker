@@ -24,13 +24,11 @@ I hope you enjoy it.
 - [License](#license)
 
 ## Images
-| Splash Screen | Character Screen |
-|:---:|:---:|
-|![image](// add image)|![image](// add image)|
-| Language Screen | Clicker Screen |
-|![image](// add image)|![image](// add image)|
-| Github Screen | Ranking Screen |
-|![image](// add image)|![image](// add image)|
+| Splash Screen | Character Screen | Language Screen |
+|:---:|:---:|:---:|
+|<img src="https://github.com/user-attachments/assets/21528600-8b93-43f3-a938-a60af25a51e2" width="200"/>|<img src="https://github.com/user-attachments/assets/91d81f27-f961-43e3-b607-1461cf3dbf29" width="200"/>|<img src="https://github.com/user-attachments/assets/2d579645-c390-4b91-b1be-df807f127206" width="200"/>|
+| Clicker Screen | Github Screen | Ranking Screen |
+|<img src="https://github.com/user-attachments/assets/2c24f3e9-aaba-42fd-ad84-3ddb26893af7" width="200"/>|![image](// add image)|![image](// add image)|
 
 ## Video
 // add video
