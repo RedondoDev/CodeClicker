@@ -8,6 +8,12 @@
     <img alt="Firebase" src="https://img.shields.io/badge/firebase-a08021?style=for-the-badge&logo=firebase&logoColor=white&color=de3308" width="65" height="20">
 </div>
 
+<br>
+
+<div align="center">
+    <img alt="Logo" src="https://github.com/user-attachments/assets/04fc3887-ae38-4eae-b5c9-43f40762c3a8">
+</div>
+
 # CodeClicker
 CodeClicker is a clicker-style video game for android where every click generates a line of code in your favourite language and earns you money to improve your coding skills.
 <br><br>
