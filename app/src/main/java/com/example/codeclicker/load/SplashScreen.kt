@@ -48,6 +48,7 @@ fun SplashScreen(navController: NavHostController) {
             context.finish()
         } else {
             if (registered!!.created){
+                // Pedir el de verdad
                 navController.navigate("${Routes.NavigationGame}/1/registrado/java")
                 println("YA ESTÁ CREADO, A JUGAR")
             } else {

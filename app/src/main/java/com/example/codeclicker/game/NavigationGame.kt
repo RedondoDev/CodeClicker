@@ -46,6 +46,7 @@ fun NavigationGame(
     text: String,
     selectedLanguage: String
 ) {
+    // Pedir el de verdad
     val yourCharacter = YourCharacter(selectedCharacterIndex, text, selectedLanguage, 1,0, false)
 
     val navController = rememberNavController()

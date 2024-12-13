@@ -46,9 +46,12 @@ class MainActivity : ComponentActivity() {
                             LanguageScreen(navController, selectedCharacterIndex)
                         }
                         composable("${Routes.NavigationGame}/{selectedCharacterIndex}/{text}/{selectedLanguage}") { backStackEntry ->
-                            val selectedCharacterIndex = backStackEntry.arguments?.getString("selectedCharacterIndex")?.toInt() ?: 0
+                            val selectedCharacterIndex =
+                                backStackEntry.arguments?.getString("selectedCharacterIndex")
+                                    ?.toInt() ?: 0
                             val text = backStackEntry.arguments?.getString("text") ?: ""
-                            val selectedLanguage = backStackEntry.arguments?.getString("selectedLanguage") ?: ""
+                            val selectedLanguage =
+                                backStackEntry.arguments?.getString("selectedLanguage") ?: ""
                             NavigationGame(selectedCharacterIndex, text, selectedLanguage)
                         }
                     }
