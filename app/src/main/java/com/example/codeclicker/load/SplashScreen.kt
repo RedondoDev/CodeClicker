@@ -49,9 +49,16 @@ fun SplashScreen(navController: NavHostController) {
         if (registered == null) {
             context.finish()
         } else {
-            if (registered!!.created){
-                navController.navigate("${Routes.NavigationGame}/$userId/0/registrado/java")
-                println("YA ESTÁ CREADO, A JUGAR")
+            if (registered!!.created) {
+                val dataBase = userId?.let { DataBase(context, it) }
+                val character = dataBase?.getCharacter()
+                if (character != null) {
+                    navController.navigate("${Routes.NavigationGame}/$userId/-1//") // cargar personaje real
+                    println("YA ESTÁ CREADO, A JUGAR")
+                } else {
+                    // if no personaje
+                    navController.navigate("${Routes.CharacterScreen}/$userId")
+                }
             } else {
                 if (userId != null) {
                     println("EN SPLASH")

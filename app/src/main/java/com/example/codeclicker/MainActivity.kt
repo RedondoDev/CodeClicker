@@ -70,26 +70,30 @@ class MainActivity : ComponentActivity() {
                             val userId = backStackEntry.arguments?.getString("userId")
                             val selectedCharacterIndex =
                                 backStackEntry.arguments?.getString("selectedCharacterIndex")
-                                    ?.toInt() ?: 0
+                                    ?.toInt() ?: -1
                             val text = backStackEntry.arguments?.getString("text") ?: ""
                             val selectedLanguage =
                                 backStackEntry.arguments?.getString("selectedLanguage") ?: ""
                             if (userId != null) {
                                 val dataBase = DataBase(context, userId)
-                                val yourCharacter = YourCharacter(
-                                    selectedCharacterIndex,
-                                    text,
-                                    selectedLanguage,
-                                    1,
-                                    0,
-                                    false
-                                )
-                                dataBase.saveCharacter(yourCharacter)
+                                if (selectedCharacterIndex != -1 && text != "" && selectedLanguage != "") {
+                                    val yourCharacter = YourCharacter(
+                                        selectedCharacterIndex,
+                                        text,
+                                        selectedLanguage,
+                                        1,
+                                        0,
+                                        false
+                                    )
+                                    dataBase.saveCharacter(yourCharacter)
+                                    println("LO CREA")
+                                }
 
                                 var character by remember { mutableStateOf<YourCharacter?>(null) }
 
                                 LaunchedEffect(userId) {
                                     character = dataBase.getCharacter()
+                                    println("LO CARGA")
                                 }
 
                                 character?.let {
