@@ -18,6 +18,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -36,25 +37,22 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.codeclicker.R
 import com.example.codeclicker.Routes
+import com.example.codeclicker.load.DataBase
 import com.example.codeclicker.start.BottomBarButton
 import com.example.codeclicker.start.TopBar
 import com.example.codeclicker.start.YourCharacter
+import kotlinx.coroutines.delay
 
 @Composable
 fun NavigationGame(
-    userId: String,
-    selectedCharacterIndex: Int,
-    text: String,
-    selectedLanguage: String
+    dataBase: DataBase,
+    character: YourCharacter
 ) {
-    println("NAV GAME por fin con $userId")
-    // Pedir el de verdad
-    val yourCharacter = YourCharacter(selectedCharacterIndex, text, selectedLanguage, 1,0, false)
 
     val navController = rememberNavController()
 
     Scaffold(modifier = Modifier.fillMaxSize(),
-        topBar = { TopBar(text) },
+        topBar = { TopBar(character.name) },
         bottomBar = { BottomBar2(navController) }
     ) { innerPadding ->
 
@@ -66,7 +64,7 @@ fun NavigationGame(
                     GithubScreen()
                 }
                 composable(Routes.ClickerScreen) {
-                    ClickerScreen(yourCharacter)
+                    ClickerScreen(character)
                 }
                 composable(Routes.RankingScreen) {
                     RankingScreen()

@@ -1,9 +1,15 @@
 package com.example.codeclicker
 
+import android.app.Activity
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -13,10 +19,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.codeclicker.game.ClickerScreen
 import com.example.codeclicker.game.NavigationGame
+import com.example.codeclicker.load.DataBase
 import com.example.codeclicker.load.LogInManager
 import com.example.codeclicker.load.SplashScreen
 import com.example.codeclicker.start.CharacterScreen
 import com.example.codeclicker.start.LanguageScreen
+import com.example.codeclicker.start.YourCharacter
 import com.example.codeclicker.ui.theme.CodeClickerTheme
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -29,6 +37,7 @@ class MainActivity : ComponentActivity() {
             CodeClickerTheme {
 
                 val navController = rememberNavController()
+                val context = LocalContext.current as Activity
 
                 NavHost(
                     navController = navController,
@@ -59,13 +68,33 @@ class MainActivity : ComponentActivity() {
                         composable("${Routes.NavigationGame}/{userId}/{selectedCharacterIndex}/{text}/{selectedLanguage}") { backStackEntry ->
                             println("EN MAIN -> NAVGAME")
                             val userId = backStackEntry.arguments?.getString("userId")
-                            val selectedCharacterIndex = backStackEntry.arguments?.getString("selectedCharacterIndex")?.toInt() ?: 0
+                            val selectedCharacterIndex =
+                                backStackEntry.arguments?.getString("selectedCharacterIndex")
+                                    ?.toInt() ?: 0
                             val text = backStackEntry.arguments?.getString("text") ?: ""
-                            val selectedLanguage = backStackEntry.arguments?.getString("selectedLanguage") ?: ""
+                            val selectedLanguage =
+                                backStackEntry.arguments?.getString("selectedLanguage") ?: ""
                             if (userId != null) {
-                                println("Voy pal NavGame")
-                                println("$userId, $selectedCharacterIndex, $text, $selectedLanguage")
-                                NavigationGame(userId, selectedCharacterIndex, text, selectedLanguage)
+                                val dataBase = DataBase(context, userId)
+                                val yourCharacter = YourCharacter(
+                                    selectedCharacterIndex,
+                                    text,
+                                    selectedLanguage,
+                                    1,
+                                    0,
+                                    false
+                                )
+                                dataBase.saveCharacter(yourCharacter)
+
+                                var character by remember { mutableStateOf<YourCharacter?>(null) }
+
+                                LaunchedEffect(userId) {
+                                    character = dataBase.getCharacter()
+                                }
+
+                                character?.let {
+                                    NavigationGame(dataBase, it)
+                                }
                             } else {
                                 println("userId es nulo")
                             }
