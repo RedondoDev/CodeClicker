@@ -1,47 +1,31 @@
 package com.example.codeclicker.game
 
-import androidx.compose.foundation.Indication
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.indication
-import androidx.compose.foundation.interaction.InteractionSource
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.codeclicker.R
 import com.example.codeclicker.Routes
 import com.example.codeclicker.load.DataBase
-import com.example.codeclicker.start.BottomBarButton
 import com.example.codeclicker.start.TopBar
 import com.example.codeclicker.start.YourCharacter
-import kotlinx.coroutines.delay
 
 @Composable
 fun NavigationGame(
@@ -61,13 +45,13 @@ fun NavigationGame(
             startDestination = Routes.ClickerScreen,
             builder = {
                 composable(Routes.GithubScreen) {
-                    GithubScreen()
+                    GithubScreen(character, dataBase)
                 }
                 composable(Routes.ClickerScreen) {
-                    ClickerScreen(character)
+                    ClickerScreen(character, dataBase)
                 }
                 composable(Routes.RankingScreen) {
-                    RankingScreen()
+                    RankingScreen(character, dataBase)
                 }
             },
             modifier = Modifier.padding(innerPadding)
@@ -84,8 +68,16 @@ fun BottomBar2(navController: NavController) {
         NavItem(icono = painterResource(R.drawable.star), label = "Ranking")
     )
 
+    val navBackStack by navController.currentBackStackEntryAsState()
     var selectedIndex by rememberSaveable { mutableIntStateOf(1) }
-    val interactionSource = remember { MutableInteractionSource() }
+
+    val isSelected = navBackStack?.destination?.route
+    selectedIndex = when (isSelected) {
+        "github_Screen" -> 0
+        "clicker_Screen" -> 1
+        "ranking_Screen" -> 2
+        else -> 3
+    }
 
     NavigationBar(
         containerColor = Color(0xFF3c6391)

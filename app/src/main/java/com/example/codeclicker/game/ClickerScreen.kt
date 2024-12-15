@@ -3,7 +3,6 @@ package com.example.codeclicker.game
 import android.widget.Toast
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -14,8 +13,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -26,7 +23,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -40,10 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -52,15 +45,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.codeclicker.R
+import com.example.codeclicker.load.DataBase
 import com.example.codeclicker.start.CharacterData
 import com.example.codeclicker.start.YourCharacter
 import com.example.codeclicker.ui.theme.quicksandFamily
-import kotlinx.coroutines.delay
 import java.util.LinkedList
 import kotlin.random.Random
 
+const val roadToSenior = 100 // Balancear
+
 @Composable
-fun ClickerScreen(yourCharacter: YourCharacter) {
+fun ClickerScreen(yourCharacter: YourCharacter, dataBase: DataBase) {
 
     val imageList: List<Int> = listOf(
         R.drawable.uno,
@@ -80,8 +75,6 @@ fun ClickerScreen(yourCharacter: YourCharacter) {
         CharacterData(3, painterResource(imageList[6]), painterResource(imageList[7]))
     )
 
-
-    val unlocked by rememberSaveable { mutableStateOf(yourCharacter.copilot) }
     var currentToast by remember { mutableStateOf<Toast?>(null) }
     val context = LocalContext.current
 
@@ -94,11 +87,12 @@ fun ClickerScreen(yourCharacter: YourCharacter) {
 
     val progress = yourCharacter.clics.toFloat()
     val mProgress =
-        animateFloatAsState(progress / 100, label = "Progreso") // Cambiar cantidad de clics
+        animateFloatAsState(progress / roadToSenior, label = "Progreso") // Cambiar cantidad de clics
 
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .background(Color.White)
             .padding(
                 start = 10.dp,
                 end = 10.dp
@@ -133,7 +127,7 @@ fun ClickerScreen(yourCharacter: YourCharacter) {
                 .clip(CircleShape)
                 .clickable {
                     // Hacer lógica del timer
-                    if (!unlocked) {
+                    if (!yourCharacter.copilot) {
                         currentToast?.cancel()
                         currentToast =
                             Toast.makeText(context, "Habilidad bloqueada", Toast.LENGTH_SHORT)
@@ -146,14 +140,14 @@ fun ClickerScreen(yourCharacter: YourCharacter) {
             Icon(
                 painterResource(R.drawable.copilot),
                 "",
-                tint = if (!unlocked) Color.Gray else Color.Black,
+                tint = if (!yourCharacter.copilot) Color.Gray else Color.Black,
                 modifier = Modifier.padding(5.dp)
             )
-            if (!unlocked) {
+            if (!yourCharacter.copilot) {
                 Icon(
                     painterResource(R.drawable.diagonal_roja),
                     "",
-                    tint = if (!unlocked) Color(0xFFC56D6D) else Color.Red,
+                    tint = Color(0xFFC56D6D),
                     modifier = Modifier.padding(
                         start = 8.dp,
                         bottom = 8.dp,
@@ -275,7 +269,7 @@ fun ClickerScreen(yourCharacter: YourCharacter) {
                 .height(365.dp)
         ) {
             for (line in lineList) {
-                var enabled by remember { mutableStateOf(false) }
+                var enabled by remember { mutableStateOf(false) } // Tymur Boolean
                 val paddingAnimation by animateDpAsState(
                     if (enabled) 250.dp else 0.dp,
                     animationSpec = tween(3000),
@@ -329,8 +323,11 @@ fun ClickerScreen(yourCharacter: YourCharacter) {
                     onClick = {
                         clics++
                         yourCharacter.clics = clics
+                        dataBase.updateClics(yourCharacter.clics)
+
                         money++
                         yourCharacter.money = money
+                        dataBase.updateMoney(yourCharacter.money)
 
                         randomLineIndex = when (yourCharacter.language) {
                             "Java" -> Random.nextInt(javaLanguage.lines.size)
@@ -360,7 +357,7 @@ fun ClickerScreen(yourCharacter: YourCharacter) {
         ) {
 
             Image(
-                painter = if (yourCharacter.money < 100) junior else senior, // Cambiar cantidad de clics
+                painter = if (yourCharacter.clics < roadToSenior) junior else senior,
                 "Junior/Senior Image",
                 modifier = Modifier
                     .fillMaxSize()
@@ -368,7 +365,6 @@ fun ClickerScreen(yourCharacter: YourCharacter) {
         }
 
     }
-
 }
 
 fun Modifier.clickableWithoutRipple(

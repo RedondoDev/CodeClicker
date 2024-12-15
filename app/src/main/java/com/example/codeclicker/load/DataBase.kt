@@ -2,10 +2,6 @@ package com.example.codeclicker.load
 
 import android.app.Activity
 import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import com.example.codeclicker.R
 import com.example.codeclicker.start.YourCharacter
 import com.google.firebase.Firebase
@@ -22,6 +18,18 @@ class DataBase(val activity: Activity, val userId: String) {
 
     fun saveCharacter(yourCharacter: YourCharacter) {
         dataBase.getReference("users/$userId/character").setValue(yourCharacter)
+    }
+
+    fun updateMoney(money: Int) {
+        dataBase.getReference("users/$userId/character").child("money").setValue(money)
+    }
+
+    fun updateClics(clics: Int) {
+        dataBase.getReference("users/$userId/character").child("clics").setValue(clics)
+    }
+
+    fun updateCopilot(copilot: Boolean) {
+        dataBase.getReference("users/$userId/character").child("copilot").setValue(copilot)
     }
 
     suspend fun getCharacter(): YourCharacter? {

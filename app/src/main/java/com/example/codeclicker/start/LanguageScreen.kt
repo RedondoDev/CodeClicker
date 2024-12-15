@@ -1,6 +1,5 @@
 package com.example.codeclicker.start
 
-import android.app.Activity
 import android.media.MediaPlayer
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -15,22 +14,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -89,7 +80,7 @@ println(userId)
                 text1 = "Atrás",
                 text2 = "Finalizar",
                 navController = navController,
-                onClickBack = { navController.navigate(Routes.CharacterScreen) },
+                onClickBack = { navController.navigate("${Routes.CharacterScreen}/$userId") },
                 onClickContinue = {
                     if (text.isEmpty()) {
                         currentToast?.cancel()
@@ -98,11 +89,9 @@ println(userId)
                         currentToast?.show()
                     } else {
                         // Comprobación de nombre
-                        // Crear en la BD
                         println(userId)
-                        navController.popBackStack(Routes.SplashScreen, inclusive = true)
                         navController.navigate("${Routes.NavigationGame}/$userId/$selectedCharacterIndex/$text/$selectedLanguage") {
-                            popUpTo(Routes.CharacterScreen) { inclusive = true }
+                            popUpTo(0) { inclusive = true }
                         }
                     }
                 })

@@ -4,8 +4,6 @@ import android.app.Activity
 import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
-import androidx.credentials.GetPasswordOption
-import androidx.credentials.GetPublicKeyCredentialOption
 import com.example.codeclicker.R
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
@@ -27,14 +25,6 @@ class LogInManager(private val activity: Activity) {
     val auth = Firebase.auth
     val userId = auth.currentUser?.uid
 
-    fun getCredentialOptions(requestJson: String) {
-        val getPasswordOption = GetPasswordOption()
-
-        val getPublicKeyCredentialOption = GetPublicKeyCredentialOption(
-            requestJson = requestJson
-        )
-    }
-
     suspend fun signInGoogle(): Registered? {
         try {
             val ranNonce: String = UUID.randomUUID().toString()
@@ -43,10 +33,9 @@ class LogInManager(private val activity: Activity) {
             val digest: ByteArray = md.digest(bytes)
             val hashedNonce: String = digest.fold("") { str, it -> str + "%02x".format(it) }
 
-            // Set up Google ID option
             val googleIdOption: GetGoogleIdOption = GetGoogleIdOption.Builder()
                 .setFilterByAuthorizedAccounts(false)
-                .setServerClientId(activity.getString(R.string.WebClient)) // Si no va probar AndroidClient
+                .setServerClientId(activity.getString(R.string.WebClient))
                 .setNonce(hashedNonce)
                 .build()
 
@@ -56,6 +45,7 @@ class LogInManager(private val activity: Activity) {
 
             val result = credentialManager.getCredential(activity, request)
             val credential = result.credential
+
             if (credential is CustomCredential && credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
                 val googleIdTokenCredential =
                     GoogleIdTokenCredential.createFrom(credential.data)
@@ -72,9 +62,6 @@ class LogInManager(private val activity: Activity) {
                     println("VERDADERO")
                     return userId?.let { Registered(userId = it, created = true) }
                 }
-
-            } else {
-                println("Error")
             }
 
         } catch (e: Exception) {

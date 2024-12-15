@@ -17,17 +17,13 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.codeclicker.game.ClickerScreen
 import com.example.codeclicker.game.NavigationGame
 import com.example.codeclicker.load.DataBase
-import com.example.codeclicker.load.LogInManager
 import com.example.codeclicker.load.SplashScreen
 import com.example.codeclicker.start.CharacterScreen
 import com.example.codeclicker.start.LanguageScreen
 import com.example.codeclicker.start.YourCharacter
 import com.example.codeclicker.ui.theme.CodeClickerTheme
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
