@@ -36,8 +36,10 @@ fun SplashScreen(navController: NavHostController) {
     var registered: Registered?
     val context = LocalContext.current
     val manager = LogInManager(context as ComponentActivity)
+    val userId = manager.userId
 
     Splash(splashDuration)
+    println("userId en SplashScreen: $userId")
 
     LaunchedEffect(key1 = true) {
         delay(3000)
@@ -49,12 +51,16 @@ fun SplashScreen(navController: NavHostController) {
         } else {
             if (registered!!.created){
                 // Pedir el de verdad
-                navController.navigate("${Routes.NavigationGame}/1/registrado/java")
+                navController.navigate("${Routes.NavigationGame}/$userId/0/registrado/java")
                 println("YA ESTÁ CREADO, A JUGAR")
             } else {
-            // Hacer Log In
-                navController.navigate(Routes.CharacterScreen)
-                println("AÚN NO ESTÁ CREADO, A CREAR")
+                if (userId != null) {
+                    println("EN SPLASH")
+                    navController.navigate("${Routes.CharacterScreen}/$userId")
+                    println("AÚN NO ESTÁ CREADO, A CREAR")
+                } else {
+                    println("userId es nulo")
+                }
             }
         }
     }

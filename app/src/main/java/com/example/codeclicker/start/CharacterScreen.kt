@@ -41,8 +41,9 @@ import com.example.codeclicker.Routes
 import com.example.codeclicker.ui.theme.quicksandFamily
 
 @Composable
-fun CharacterScreen(navController: NavController, modifier: Modifier = Modifier) {
+fun CharacterScreen(navController: NavController, userId: String, modifier: Modifier = Modifier) {
 
+    println("EN CHAR")
     val context = LocalContext.current
     val blop = remember { MediaPlayer.create(context, R.raw.blop) }
 
@@ -76,7 +77,8 @@ fun CharacterScreen(navController: NavController, modifier: Modifier = Modifier)
                 navController = navController,
                 onClickBack = { activity?.finish() },
                 onClickContinue = {
-                    navController.navigate("${Routes.LanguageScreen}/$selectedCharacterIndex")
+                    navController.navigate("${Routes.LanguageScreen}/$userId/$selectedCharacterIndex")
+                    println("CharacterScreen: Navigating to LanguageScreen with userId: $userId and selectedCharacterIndex: $selectedCharacterIndex")
                 })
         }
     ) { innerPadding ->

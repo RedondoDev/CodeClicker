@@ -42,10 +42,12 @@ import com.example.codeclicker.start.YourCharacter
 
 @Composable
 fun NavigationGame(
+    userId: String,
     selectedCharacterIndex: Int,
     text: String,
     selectedLanguage: String
 ) {
+    println("NAV GAME por fin con $userId")
     // Pedir el de verdad
     val yourCharacter = YourCharacter(selectedCharacterIndex, text, selectedLanguage, 1,0, false)
 

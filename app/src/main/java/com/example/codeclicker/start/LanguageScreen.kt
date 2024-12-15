@@ -53,7 +53,10 @@ import com.example.codeclicker.Routes
 import com.example.codeclicker.ui.theme.quicksandFamily
 
 @Composable
-fun LanguageScreen(navController: NavController, selectedCharacterIndex: Int) {
+fun LanguageScreen(navController: NavController, userId: String, selectedCharacterIndex: Int) {
+
+    println("EN LAN")
+println(userId)
 
     val imageList: List<Int> = listOf(
         R.drawable.uno,
@@ -96,9 +99,9 @@ fun LanguageScreen(navController: NavController, selectedCharacterIndex: Int) {
                     } else {
                         // Comprobación de nombre
                         // Crear en la BD
-
+                        println(userId)
                         navController.popBackStack(Routes.SplashScreen, inclusive = true)
-                        navController.navigate("${Routes.NavigationGame}/$selectedCharacterIndex/$text/$selectedLanguage") {
+                        navController.navigate("${Routes.NavigationGame}/$userId/$selectedCharacterIndex/$text/$selectedLanguage") {
                             popUpTo(Routes.CharacterScreen) { inclusive = true }
                         }
                     }
