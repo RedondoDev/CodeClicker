@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -29,23 +30,23 @@ import kotlinx.coroutines.delay
 fun SplashScreen(navController: NavHostController) {
 
     val splashDuration = 3000
-    var registered: Registered?
     val context = LocalContext.current
-    val manager = LogInManager(context as ComponentActivity)
-    val userId = manager.userId
+
 
     Splash(splashDuration)
-    println("userId en SplashScreen: $userId")
 
     LaunchedEffect(key1 = true) {
+        val manager = LogInManager(context as ComponentActivity)
         delay(3000)
         navController.popBackStack()
-        registered = manager.signInGoogle()
+        val registered = manager.signInGoogle()
+        val userId = registered?.userId
+        println("userId en SplashScreen: $userId")
 
         if (registered == null) {
             context.finish()
         } else {
-            if (registered!!.created) {
+            if (registered.created) {
                 val dataBase = userId?.let { DataBase(context, it) }
                 val character = dataBase?.getCharacter()
                 if (character != null) {
@@ -55,13 +56,10 @@ fun SplashScreen(navController: NavHostController) {
                     navController.navigate("${Routes.CharacterScreen}/$userId")
                 }
             } else {
-                if (userId != null) {
                     println("EN SPLASH")
                     navController.navigate("${Routes.CharacterScreen}/$userId")
                     println("AÚN NO ESTÁ CREADO, A CREAR")
-                } else {
-                    println("userId es nulo")
-                }
+
             }
         }
     }

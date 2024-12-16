@@ -23,7 +23,6 @@ class LogInManager(private val activity: Activity) {
 
     val credentialManager = CredentialManager.create(activity)
     val auth = Firebase.auth
-    val userId = auth.currentUser?.uid
 
     suspend fun signInGoogle(): Registered? {
         try {
@@ -57,10 +56,10 @@ class LogInManager(private val activity: Activity) {
 
                 if (a.additionalUserInfo?.isNewUser == true) {
                     println("FALSO")
-                    return userId?.let { Registered(userId = it, created = false) }
+                    return auth.currentUser?.uid?.let { Registered(userId = it, created = false) }
                 } else if (a.additionalUserInfo?.isNewUser == false) {
                     println("VERDADERO")
-                    return userId?.let { Registered(userId = it, created = true) }
+                    return auth.currentUser?.uid?.let { Registered(userId = it, created = true) }
                 }
             }
 
