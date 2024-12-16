@@ -8,5 +8,5 @@ data class YourCharacter(
     var money: Int,
     var copilot: Boolean
 ) {
-    constructor(): this(0, "Name", "Language", 1, 0, false)
+    constructor(): this(0, "Name", "Language", 0, 0, false)
 }

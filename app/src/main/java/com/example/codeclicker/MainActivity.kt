@@ -77,7 +77,7 @@ class MainActivity : ComponentActivity() {
                                         selectedCharacterIndex,
                                         text,
                                         selectedLanguage,
-                                        1,
+                                        0,
                                         0,
                                         false
                                     )
