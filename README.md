@@ -11,7 +11,7 @@
 <br>
 
 <div align="center">
-    <img alt="Logo" src="https://github.com/user-attachments/assets/80b3cacf-af8d-4e8f-91c2-d0c14f8bd1a3" width="100%" height="100%">
+    <img alt="Logo" src="https://github.com/user-attachments/assets/409fbdd7-91b6-4d87-bec3-12306e92164c" width="100%" height="100%">
 </div>
 
 # CodeClicker
