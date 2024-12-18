@@ -42,27 +42,14 @@ class DataBase(val activity: Activity, val userId: String) {
         }
     }
 
-    fun updateCharacter(character: YourCharacter) {
-
-        dataBase.getReference("users/$userId/character")
-            .addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    println("On data change")
-                    val value = snapshot.getValue<YourCharacter>()
-                    if (value != null) {
-                        character.name = value.name
-                        character.selectedCharacterIndex = value.selectedCharacterIndex
-                        character.language = value.language
-                        character.clics = value.clics
-                        character.money = value.money
-                        character.copilot = value.copilot
-                    }
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    Log.w("TAG", "Failed to read value.", error.toException())
-                }
-            })
+    suspend fun getMoney(): Int? {
+        return try {
+            val snapshot = dataBase.getReference("users/$userId/character/money").get().await()
+            snapshot.getValue(Int::class.java)
+        } catch (e: Exception) {
+            Log.e("DataBase", "Error getting character", e)
+            null
+        }
     }
 
 }
