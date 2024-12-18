@@ -71,28 +71,28 @@ private val listSkills = listOf(
         "Funciones",
         R.drawable.functions,
         "Genera 2 líneas por clic en lugar de una.",
-        500,
-        false
-    ),
-    Skill(
-        "Recursividad",
-        R.drawable.functions,
-        "Genera 2 líneas por clic en lugar de una.",
-        500,
+        10,
         false
     ),
     Skill(
         "Bots",
-        R.drawable.functions,
+        R.drawable.bot,
         "Genera 2 líneas por clic en lugar de una.",
-        500,
+        50,
         false
     ),
     Skill(
         "Inteligencia Artificial",
-        R.drawable.functions,
+        R.drawable.ai,
         "Genera 2 líneas por clic en lugar de una.",
-        500,
+        75,
+        false
+    ),
+    Skill(
+        "En producción",
+        R.drawable.enproduccion,
+        "Disponible próximamente. \nHabilidad en producción.",
+        100,
         false
     ),
 )
@@ -182,6 +182,8 @@ fun GithubScreen(yourCharacter: YourCharacter, dataBase: DataBase) {
                 }
             }
             SkillEditDetails(
+                dataBase,
+                yourCharacter,
                 skill = selectedSkill,
                 onConfirmClick = {
                     selectedSkill = null
@@ -194,6 +196,8 @@ fun GithubScreen(yourCharacter: YourCharacter, dataBase: DataBase) {
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun SharedTransitionScope.SkillEditDetails(
+    dataBase: DataBase,
+    yourCharacter: YourCharacter,
     skill: Skill?,
     modifier: Modifier = Modifier,
     onConfirmClick: () -> Unit
@@ -204,7 +208,7 @@ fun SharedTransitionScope.SkillEditDetails(
         transitionSpec = {
             fadeIn() togetherWith fadeOut()
         },
-        label = "SnackEditDetails"
+        label = "SkillEditDetails"
     ) { targetSkill ->
         Box(
             modifier = Modifier.fillMaxSize(),
@@ -258,25 +262,33 @@ fun SharedTransitionScope.SkillEditDetails(
                                     .fillMaxWidth()
                                     .padding(2.dp)
                             )
-                            Row(
-                                horizontalArrangement = Arrangement.SpaceEvenly,
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(top = 4.dp)
-                            ) {
-                                Text(
-                                    "${skill.price}€",
-                                    style = MaterialTheme.typography.titleMedium
-                                )
-                                Button(
-                                    colors = ButtonDefaults.buttonColors((Color(0xFF3c6391))),
-                                    onClick = {}
+                            if (!skill.name.equals("En producción")) {
+                                Row(
+                                    horizontalArrangement = Arrangement.SpaceEvenly,
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(top = 4.dp)
                                 ) {
                                     Text(
-                                        "Comprar",
+                                        "${skill.price}€",
                                         style = MaterialTheme.typography.titleMedium
                                     )
+                                    Button(
+                                        colors = ButtonDefaults.buttonColors((Color(0xFF3c6391))),
+                                        enabled = (yourCharacter.money >= skill.price),
+                                        onClick = {
+                                            println(yourCharacter.money)
+                                            println(skill.price)
+                                            yourCharacter.money -= skill.price
+                                            dataBase.updateMoney(yourCharacter.money)
+                                        }
+                                    ) {
+                                        Text(
+                                            "Comprar",
+                                            style = MaterialTheme.typography.titleMedium
+                                        )
+                                    }
                                 }
                             }
                         }
