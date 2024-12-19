@@ -63,37 +63,32 @@ data class Skill(
     val image: Int,
     val description: String,
     val price: Int,
-    val unlocked: Boolean
 )
 
 private val listSkills = listOf(
     Skill(
         "Funciones",
         R.drawable.functions,
-        "Genera 2 líneas por clic en lugar de una.",
+        "Genera más líneas de código por clic.",
         10,
-        false
     ),
     Skill(
         "Bots",
         R.drawable.bot,
-        "Genera 2 líneas por clic en lugar de una.",
+        "Genera una línea de código automáticamente a lo largo del tiempo.",
         50,
-        false
     ),
     Skill(
         "Inteligencia Artificial",
         R.drawable.ai,
-        "Genera 2 líneas por clic en lugar de una.",
+        "Genera muchas líneas de código de golpe.",
         75,
-        false
     ),
     Skill(
         "En producción",
         R.drawable.enproduccion,
         "Disponible próximamente. \nHabilidad en producción.",
         100,
-        false
     ),
 )
 
@@ -104,7 +99,7 @@ private val shapeForSharedElement = RoundedCornerShape(16.dp)
 @Composable
 fun GithubScreen(initialCharacter: YourCharacter, dataBase: DataBase) {
 
-    var yourCharacter by remember { mutableStateOf(initialCharacter) }
+    val yourCharacter by remember { mutableStateOf(initialCharacter) }
 
     var selectedSkill by remember { mutableStateOf<Skill?>(null) }
     Column {
@@ -268,23 +263,52 @@ fun SharedTransitionScope.SkillEditDetails(
                                     .fillMaxWidth()
                                     .padding(2.dp)
                             )
-                            if (!skill.name.equals("En producción")) {
+                            if (skill.name != "En producción") {
+                                Text(
+                                    text = when (skill.name) {
+                                        "Funciones" -> "Nivel: ${yourCharacter.functions}"
+                                        "Bots" -> "Nivel: ${yourCharacter.bots}"
+                                        "Inteligencia Artificial" -> "Nivel: ${yourCharacter.copilot}"
+                                        else -> ""
+                                    },
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = Color(0xFF3c6391),
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(2.dp)
+                                )
+                            }
+                            if (skill.name != "En producción") {
                                 Row(
                                     horizontalArrangement = Arrangement.SpaceEvenly,
                                     verticalAlignment = Alignment.CenterVertically,
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(top = 4.dp)
                                 ) {
                                     Text(
-                                        "${skill.price}€",
+                                        when (skill.name) {
+                                            "Funciones" -> "Precio: " + (skill.price * yourCharacter.functions).toString() + "€"
+                                            "Bots" -> "Precio: " + (skill.price * yourCharacter.bots).toString() + "€"
+                                            "Inteligencia Artificial" -> "Precio: " + (skill.price * yourCharacter.copilot).toString() + "€"
+                                            else -> ""
+                                        },
                                         style = MaterialTheme.typography.titleMedium
                                     )
                                     Button(
                                         colors = ButtonDefaults.buttonColors((Color(0xFF3c6391))),
-                                        enabled = (yourCharacter.money >= skill.price),
+                                        enabled = when (skill.name) {
+                                            "Funciones" -> (yourCharacter.money >= (skill.price * yourCharacter.functions))
+                                            "Bots" -> (yourCharacter.money >= (skill.price * yourCharacter.bots))
+                                            "Inteligencia Artificial" -> (yourCharacter.money >= (skill.price * yourCharacter.copilot))
+                                            else -> false
+                                        },
                                         onClick = {
-                                            yourCharacter.money -= skill.price
+                                            when (skill.name) {
+                                                "Funciones" -> yourCharacter.money -= (skill.price * yourCharacter.functions)
+                                                "Bots" -> yourCharacter.money -= (skill.price * yourCharacter.bots)
+                                                "Inteligencia Artificial" -> yourCharacter.money -= (skill.price * yourCharacter.copilot)
+                                            }
                                             when (skill.name) {
                                                 "Funciones" -> yourCharacter.functions++
                                                 "Bots" -> yourCharacter.bots++
@@ -292,7 +316,6 @@ fun SharedTransitionScope.SkillEditDetails(
                                             }
                                             dataBase.saveCharacter(yourCharacter)
                                             scope.launch {
-//                                                yourCharacter.money = dataBase.getMoney()!!
                                                 yourCharacter = dataBase.getCharacter()!!
                                             }
                                         }

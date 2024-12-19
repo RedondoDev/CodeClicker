@@ -325,7 +325,7 @@ fun ClickerScreen(yourCharacter: YourCharacter, dataBase: DataBase) {
                         yourCharacter.clics = clics
                         dataBase.updateClics(yourCharacter.clics)
 
-                        money++
+                        money += (1*yourCharacter.functions)
                         yourCharacter.money = money
                         dataBase.updateMoney(yourCharacter.money)
 

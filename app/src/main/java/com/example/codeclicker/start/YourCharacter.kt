@@ -12,8 +12,8 @@ data class YourCharacter(
     var clics: Int,
 ) {
     var money by mutableIntStateOf(0)
-    var functions by mutableIntStateOf(0)
-    var bots by mutableIntStateOf(0)
-    var copilot by mutableIntStateOf(0)
+    var functions by mutableIntStateOf(1)
+    var bots by mutableIntStateOf(1)
+    var copilot by mutableIntStateOf(1)
     constructor(): this(0, "Name", "Language", 0)
 }
