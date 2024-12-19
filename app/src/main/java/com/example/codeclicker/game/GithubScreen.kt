@@ -55,8 +55,8 @@ import com.example.codeclicker.R
 import com.example.codeclicker.load.DataBase
 import com.example.codeclicker.start.YourCharacter
 import com.example.codeclicker.ui.theme.quicksandFamily
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+
 
 data class Skill(
     val name: String,
@@ -102,7 +102,9 @@ private val shapeForSharedElement = RoundedCornerShape(16.dp)
 @SuppressLint("CoroutineCreationDuringComposition")
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun GithubScreen(yourCharacter: YourCharacter, dataBase: DataBase) {
+fun GithubScreen(initialCharacter: YourCharacter, dataBase: DataBase) {
+
+    var yourCharacter by remember { mutableStateOf(initialCharacter) }
 
     var selectedSkill by remember { mutableStateOf<Skill?>(null) }
     Column {
@@ -197,11 +199,15 @@ fun GithubScreen(yourCharacter: YourCharacter, dataBase: DataBase) {
 @Composable
 fun SharedTransitionScope.SkillEditDetails(
     dataBase: DataBase,
-    yourCharacter: YourCharacter,
+    initialCharacter: YourCharacter,
     skill: Skill?,
     modifier: Modifier = Modifier,
     onConfirmClick: () -> Unit
 ) {
+
+    var yourCharacter by remember { mutableStateOf(initialCharacter) }
+    val scope = rememberCoroutineScope()
+
     AnimatedContent(
         modifier = modifier,
         targetState = skill,
@@ -278,10 +284,17 @@ fun SharedTransitionScope.SkillEditDetails(
                                         colors = ButtonDefaults.buttonColors((Color(0xFF3c6391))),
                                         enabled = (yourCharacter.money >= skill.price),
                                         onClick = {
-                                            println(yourCharacter.money)
-                                            println(skill.price)
                                             yourCharacter.money -= skill.price
-                                            dataBase.updateMoney(yourCharacter.money)
+                                            when (skill.name) {
+                                                "Funciones" -> yourCharacter.functions++
+                                                "Bots" -> yourCharacter.bots++
+                                                "Inteligencia Artificial" -> yourCharacter.copilot++
+                                            }
+                                            dataBase.saveCharacter(yourCharacter)
+                                            scope.launch {
+//                                                yourCharacter.money = dataBase.getMoney()!!
+                                                yourCharacter = dataBase.getCharacter()!!
+                                            }
                                         }
                                     ) {
                                         Text(

@@ -28,8 +28,16 @@ class DataBase(val activity: Activity, val userId: String) {
         dataBase.getReference("users/$userId/character").child("clics").setValue(clics)
     }
 
-    fun updateCopilot(copilot: Boolean) {
+    fun updateCopilot(copilot: Int) {
         dataBase.getReference("users/$userId/character").child("copilot").setValue(copilot)
+    }
+
+    fun updateFunctions(functions: Int) {
+        dataBase.getReference("users/$userId/character").child("functions").setValue(functions)
+    }
+
+    fun updateBots(bots: Int) {
+        dataBase.getReference("users/$userId/character").child("bots").setValue(bots)
     }
 
     suspend fun getCharacter(): YourCharacter? {
@@ -51,5 +59,6 @@ class DataBase(val activity: Activity, val userId: String) {
             null
         }
     }
+
 
 }

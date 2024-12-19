@@ -127,7 +127,7 @@ fun ClickerScreen(yourCharacter: YourCharacter, dataBase: DataBase) {
                 .clip(CircleShape)
                 .clickable {
                     // Hacer lógica del timer
-                    if (!yourCharacter.copilot) {
+                    if (yourCharacter.copilot == 0) {
                         currentToast?.cancel()
                         currentToast =
                             Toast.makeText(context, "Habilidad bloqueada", Toast.LENGTH_SHORT)
@@ -140,10 +140,10 @@ fun ClickerScreen(yourCharacter: YourCharacter, dataBase: DataBase) {
             Icon(
                 painterResource(R.drawable.copilot),
                 "",
-                tint = if (!yourCharacter.copilot) Color.Gray else Color.Black,
+                tint = if (yourCharacter.copilot == 0) Color.Gray else Color.Black,
                 modifier = Modifier.padding(5.dp)
             )
-            if (!yourCharacter.copilot) {
+            if (yourCharacter.copilot == 0) {
                 Icon(
                     painterResource(R.drawable.diagonal_roja),
                     "",
