@@ -87,7 +87,10 @@ fun ClickerScreen(yourCharacter: YourCharacter, dataBase: DataBase) {
 
     val progress = yourCharacter.clics.toFloat() + 1
     val mProgress =
-        animateFloatAsState(progress / roadToSenior, label = "Progreso") // Cambiar cantidad de clics
+        animateFloatAsState(
+            progress / roadToSenior,
+            label = "Progreso"
+        ) // Cambiar cantidad de clics
 
     Box(
         modifier = Modifier
@@ -127,7 +130,7 @@ fun ClickerScreen(yourCharacter: YourCharacter, dataBase: DataBase) {
                 .clip(CircleShape)
                 .clickable {
                     // Hacer lógica del timer
-                    if (yourCharacter.copilot == 0) {
+                    if (yourCharacter.copilot == 1) {
                         currentToast?.cancel()
                         currentToast =
                             Toast.makeText(context, "Habilidad bloqueada", Toast.LENGTH_SHORT)
@@ -140,10 +143,10 @@ fun ClickerScreen(yourCharacter: YourCharacter, dataBase: DataBase) {
             Icon(
                 painterResource(R.drawable.copilot),
                 "",
-                tint = if (yourCharacter.copilot == 0) Color.Gray else Color.Black,
+                tint = if (yourCharacter.copilot == 1) Color.Gray else Color.Black,
                 modifier = Modifier.padding(5.dp)
             )
-            if (yourCharacter.copilot == 0) {
+            if (yourCharacter.copilot == 1) {
                 Icon(
                     painterResource(R.drawable.diagonal_roja),
                     "",
@@ -245,7 +248,7 @@ fun ClickerScreen(yourCharacter: YourCharacter, dataBase: DataBase) {
                     )
             )
             Text(
-                "${yourCharacter.money}€",
+                "${yourCharacter.money}$",
                 style = TextStyle(
                     fontFamily = quicksandFamily,
                     fontSize = 22.sp,
@@ -325,7 +328,7 @@ fun ClickerScreen(yourCharacter: YourCharacter, dataBase: DataBase) {
                         yourCharacter.clics = clics
                         dataBase.updateClics(yourCharacter.clics)
 
-                        money += (1*yourCharacter.functions)
+                        money += (1 * yourCharacter.functions)
                         yourCharacter.money = money
                         dataBase.updateMoney(yourCharacter.money)
 

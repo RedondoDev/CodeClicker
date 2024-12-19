@@ -100,8 +100,8 @@ private val shapeForSharedElement = RoundedCornerShape(16.dp)
 fun GithubScreen(initialCharacter: YourCharacter, dataBase: DataBase) {
 
     val yourCharacter by remember { mutableStateOf(initialCharacter) }
-
     var selectedSkill by remember { mutableStateOf<Skill?>(null) }
+
     Column {
         Row(
             horizontalArrangement = Arrangement.Center,
@@ -124,7 +124,7 @@ fun GithubScreen(initialCharacter: YourCharacter, dataBase: DataBase) {
             )
             LaunchedEffect(key1 = true) { yourCharacter.money = dataBase.getMoney()!! }
             Text(
-                "${yourCharacter.money}€",
+                "${yourCharacter.money}$",
                 style = TextStyle(
                     fontFamily = quicksandFamily,
                     fontSize = 22.sp,
@@ -235,7 +235,6 @@ fun SharedTransitionScope.SkillEditDetails(
                         .background(Color.White, shapeForSharedElement)
                         .clip(shapeForSharedElement)
                 ) {
-
                     SkillContents(
                         skill = targetSkill,
                         modifier = Modifier.sharedElement(
@@ -288,9 +287,9 @@ fun SharedTransitionScope.SkillEditDetails(
                                 ) {
                                     Text(
                                         when (skill.name) {
-                                            "Funciones" -> "Precio: " + (skill.price * yourCharacter.functions).toString() + "€"
-                                            "Bots" -> "Precio: " + (skill.price * yourCharacter.bots).toString() + "€"
-                                            "Inteligencia Artificial" -> "Precio: " + (skill.price * yourCharacter.copilot).toString() + "€"
+                                            "Funciones" -> "Precio: " + (skill.price * yourCharacter.functions * yourCharacter.functions).toString() + "$"
+                                            "Bots" -> "Precio: " + (skill.price * yourCharacter.bots * yourCharacter.bots).toString() + "$"
+                                            "Inteligencia Artificial" -> "Precio: " + (skill.price * yourCharacter.copilot * yourCharacter.copilot).toString() + "$"
                                             else -> ""
                                         },
                                         style = MaterialTheme.typography.titleMedium
@@ -298,16 +297,16 @@ fun SharedTransitionScope.SkillEditDetails(
                                     Button(
                                         colors = ButtonDefaults.buttonColors((Color(0xFF3c6391))),
                                         enabled = when (skill.name) {
-                                            "Funciones" -> (yourCharacter.money >= (skill.price * yourCharacter.functions))
-                                            "Bots" -> (yourCharacter.money >= (skill.price * yourCharacter.bots))
-                                            "Inteligencia Artificial" -> (yourCharacter.money >= (skill.price * yourCharacter.copilot))
+                                            "Funciones" -> (yourCharacter.money >= (skill.price * yourCharacter.functions * yourCharacter.functions))
+                                            "Bots" -> (yourCharacter.money >= (skill.price * yourCharacter.bots * yourCharacter.bots))
+                                            "Inteligencia Artificial" -> (yourCharacter.money >= (skill.price * yourCharacter.copilot * yourCharacter.copilot))
                                             else -> false
                                         },
                                         onClick = {
                                             when (skill.name) {
-                                                "Funciones" -> yourCharacter.money -= (skill.price * yourCharacter.functions)
-                                                "Bots" -> yourCharacter.money -= (skill.price * yourCharacter.bots)
-                                                "Inteligencia Artificial" -> yourCharacter.money -= (skill.price * yourCharacter.copilot)
+                                                "Funciones" -> yourCharacter.money -= (skill.price * yourCharacter.functions * yourCharacter.functions)
+                                                "Bots" -> yourCharacter.money -= (skill.price * yourCharacter.bots * yourCharacter.bots)
+                                                "Inteligencia Artificial" -> yourCharacter.money -= (skill.price * yourCharacter.copilot * yourCharacter.copilot)
                                             }
                                             when (skill.name) {
                                                 "Funciones" -> yourCharacter.functions++
@@ -318,6 +317,7 @@ fun SharedTransitionScope.SkillEditDetails(
                                             scope.launch {
                                                 yourCharacter = dataBase.getCharacter()!!
                                             }
+                                            println(yourCharacter.functions)
                                         }
                                     ) {
                                         Text(
