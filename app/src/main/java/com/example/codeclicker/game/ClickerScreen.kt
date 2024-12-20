@@ -28,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -56,7 +57,7 @@ import kotlinx.coroutines.launch
 import java.util.LinkedList
 import kotlin.random.Random
 
-const val roadToSenior = 1000 // Balancear
+const val roadToSenior = 1000
 
 @Composable
 fun ClickerScreen(yourCharacter: YourCharacter, dataBase: DataBase) {
@@ -93,6 +94,9 @@ fun ClickerScreen(yourCharacter: YourCharacter, dataBase: DataBase) {
             label = "Progreso"
         )
 
+    var isCooldown by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -122,30 +126,39 @@ fun ClickerScreen(yourCharacter: YourCharacter, dataBase: DataBase) {
                 bottom = 10.dp
             )
     ) {
+        var timer by remember { mutableLongStateOf(60L) }
+
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
-                .size(70.dp)
+                .size(80.dp)
                 .align(Alignment.TopStart)
                 .padding(6.dp)
                 .clip(CircleShape)
                 .clickable {
-                    // Hacer lógica del timer
-                    if (yourCharacter.copilot == 1) {
+                    if (yourCharacter.copilot == 1 || isCooldown) {
                         currentToast?.cancel()
                         currentToast =
                             Toast.makeText(context, "Habilidad bloqueada", Toast.LENGTH_SHORT)
                         currentToast?.show()
                     } else {
-                        // método de copilot
+                        isCooldown = true
+                        scope.launch {
+                            delay(timer * 1000)
+                            isCooldown = false
+                        }
+                        yourCharacter.money += (100 * yourCharacter.copilot)
+                        dataBase.updateMoney(yourCharacter.money)
                     }
                 }
         ) {
             Icon(
                 painterResource(R.drawable.copilot),
                 "",
-                tint = if (yourCharacter.copilot == 1) Color.Gray else Color.Black,
-                modifier = Modifier.padding(5.dp)
+                tint = if (yourCharacter.copilot == 1 || isCooldown) Color.Gray else Color.Black,
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .padding(7.dp)
             )
             if (yourCharacter.copilot == 1) {
                 Icon(
@@ -154,11 +167,31 @@ fun ClickerScreen(yourCharacter: YourCharacter, dataBase: DataBase) {
                     tint = Color(0xFFC56D6D),
                     modifier = Modifier.padding(
                         start = 8.dp,
-                        bottom = 8.dp,
+                        bottom = 18.dp,
                         top = 10.dp,
                         end = 10.dp
                     )
                 )
+            } else {
+                LaunchedEffect(isCooldown) {
+                    while (isCooldown && timer > 0) {
+                        delay(1000)
+                        timer--
+                    }
+                    timer = 60
+                }
+                if (isCooldown) {
+                    Text(
+                        text = "$timer",
+                        style = TextStyle(
+                            fontFamily = quicksandFamily,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFFC56D6D)
+                        ),
+                        modifier = Modifier.align(Alignment.BottomCenter)
+                    )
+                }
             }
         }
 
@@ -243,10 +276,7 @@ fun ClickerScreen(yourCharacter: YourCharacter, dataBase: DataBase) {
                 "Coin",
                 modifier = Modifier
                     .size(25.dp)
-                    .padding(
-                        top = 1.dp,
-                        end = 5.dp
-                    )
+                    .padding(top = 1.dp, end = 5.dp)
             )
             Text(
                 "${yourCharacter.money}$",
@@ -264,7 +294,6 @@ fun ClickerScreen(yourCharacter: YourCharacter, dataBase: DataBase) {
         var line by remember { mutableStateOf(javaLanguage.lines[randomLineIndex]) }
 
         val lineList by rememberSaveable { mutableStateOf(LinkedList<CodeLine>()) }
-
 
         Box(
             contentAlignment = Alignment.BottomStart,

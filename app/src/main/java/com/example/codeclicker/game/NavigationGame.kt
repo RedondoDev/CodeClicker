@@ -40,7 +40,7 @@ fun NavigationGame(
 
     LaunchedEffect(key1 = true) {
         while (true) {
-            delay(1000)
+            delay(3000)
             character.money += (character.bots - 1)
             dataBase.updateMoney(character.money)
         }

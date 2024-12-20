@@ -70,13 +70,13 @@ private val listSkills = listOf(
     Skill(
         "Funciones",
         R.drawable.functions,
-        "Genera más líneas de código por clic.",
+        "Genera más dinero por cada línea de código.",
         10,
     ),
     Skill(
         "Bots",
         R.drawable.bot,
-        "Genera una línea de código automáticamente a lo largo del tiempo.",
+        "Genera dinero automáticamente a lo largo del tiempo.",
         50,
     ),
     Skill(
@@ -138,7 +138,7 @@ fun GithubScreen(initialCharacter: YourCharacter, dataBase: DataBase) {
                 modifier = Modifier
                     .fillMaxSize()
                     .background(Color(0xffcbd8e8))
-                    .padding(horizontal = 16.dp,),
+                    .padding(horizontal = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 items(listSkills) { skill ->
