@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -137,12 +138,7 @@ fun GithubScreen(initialCharacter: YourCharacter, dataBase: DataBase) {
                 modifier = Modifier
                     .fillMaxSize()
                     .background(Color(0xffcbd8e8))
-                    .padding(
-                        top = 0.dp,
-                        start = 16.dp,
-                        bottom = 16.dp,
-                        end = 16.dp
-                    ),
+                    .padding(horizontal = 16.dp,),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 items(listSkills) { skill ->
@@ -177,6 +173,7 @@ fun GithubScreen(initialCharacter: YourCharacter, dataBase: DataBase) {
                         }
                     }
                 }
+                item { Spacer(modifier = Modifier.fillMaxWidth()) }
             }
             SkillEditDetails(
                 dataBase,

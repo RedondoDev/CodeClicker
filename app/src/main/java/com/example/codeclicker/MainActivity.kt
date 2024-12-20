@@ -76,8 +76,7 @@ class MainActivity : ComponentActivity() {
                                     val yourCharacter = YourCharacter(
                                         selectedCharacterIndex,
                                         text,
-                                        selectedLanguage,
-                                        0
+                                        selectedLanguage
                                     )
                                     dataBase.saveCharacter(yourCharacter)
                                     println("LO CREA")

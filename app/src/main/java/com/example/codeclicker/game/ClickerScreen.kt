@@ -25,10 +25,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -49,10 +51,12 @@ import com.example.codeclicker.load.DataBase
 import com.example.codeclicker.start.CharacterData
 import com.example.codeclicker.start.YourCharacter
 import com.example.codeclicker.ui.theme.quicksandFamily
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.LinkedList
 import kotlin.random.Random
 
-const val roadToSenior = 100 // Balancear
+const val roadToSenior = 1000 // Balancear
 
 @Composable
 fun ClickerScreen(yourCharacter: YourCharacter, dataBase: DataBase) {
@@ -82,15 +86,12 @@ fun ClickerScreen(yourCharacter: YourCharacter, dataBase: DataBase) {
     val senior = charactersList[yourCharacter.selectedCharacterIndex].image2
     val evolved by rememberSaveable { mutableStateOf(false) }
 
-    var clics by rememberSaveable { mutableIntStateOf(yourCharacter.clics) }
-    var money by rememberSaveable { mutableIntStateOf(yourCharacter.money) }
-
     val progress = yourCharacter.clics.toFloat() + 1
     val mProgress =
         animateFloatAsState(
             progress / roadToSenior,
             label = "Progreso"
-        ) // Cambiar cantidad de clics
+        )
 
     Box(
         modifier = Modifier
@@ -264,6 +265,7 @@ fun ClickerScreen(yourCharacter: YourCharacter, dataBase: DataBase) {
 
         val lineList by rememberSaveable { mutableStateOf(LinkedList<CodeLine>()) }
 
+
         Box(
             contentAlignment = Alignment.BottomStart,
             modifier = Modifier
@@ -324,12 +326,11 @@ fun ClickerScreen(yourCharacter: YourCharacter, dataBase: DataBase) {
                 .clickableWithoutRipple(
                     interactionSource = interactionSource,
                     onClick = {
-                        clics++
-                        yourCharacter.clics = clics
+
+                        yourCharacter.clics++
                         dataBase.updateClics(yourCharacter.clics)
 
-                        money += (1 * yourCharacter.functions)
-                        yourCharacter.money = money
+                        yourCharacter.money += yourCharacter.functions
                         dataBase.updateMoney(yourCharacter.money)
 
                         randomLineIndex = when (yourCharacter.language) {

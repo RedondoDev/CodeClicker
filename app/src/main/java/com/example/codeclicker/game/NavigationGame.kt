@@ -9,6 +9,7 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -27,6 +28,7 @@ import com.example.codeclicker.Routes
 import com.example.codeclicker.load.DataBase
 import com.example.codeclicker.start.TopBar
 import com.example.codeclicker.start.YourCharacter
+import kotlinx.coroutines.delay
 
 @Composable
 fun NavigationGame(
@@ -36,11 +38,18 @@ fun NavigationGame(
 
     val navController = rememberNavController()
 
+    LaunchedEffect(key1 = true) {
+        while (true) {
+            delay(1000)
+            character.money += (character.bots - 1)
+            dataBase.updateMoney(character.money)
+        }
+    }
+
     Scaffold(modifier = Modifier.fillMaxSize(),
         topBar = { TopBar(character.name) },
         bottomBar = { BottomBar2(navController) }
     ) { innerPadding ->
-
         NavHost(
             navController = navController,
             startDestination = Routes.ClickerScreen,
