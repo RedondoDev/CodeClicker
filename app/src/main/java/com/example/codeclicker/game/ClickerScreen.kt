@@ -25,10 +25,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -94,7 +92,6 @@ fun ClickerScreen(yourCharacter: YourCharacter, dataBase: DataBase) {
             label = "Progreso"
         )
 
-    var isCooldown by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
 
     Box(
@@ -126,7 +123,6 @@ fun ClickerScreen(yourCharacter: YourCharacter, dataBase: DataBase) {
                 bottom = 10.dp
             )
     ) {
-        var timer by remember { mutableLongStateOf(60L) }
 
         Box(
             contentAlignment = Alignment.Center,
@@ -136,18 +132,18 @@ fun ClickerScreen(yourCharacter: YourCharacter, dataBase: DataBase) {
                 .padding(6.dp)
                 .clip(CircleShape)
                 .clickable {
-                    if (yourCharacter.copilot == 1 || isCooldown) {
+                    if (yourCharacter.copilot == 1 || yourCharacter.isCooldown) {
                         currentToast?.cancel()
                         currentToast =
                             Toast.makeText(context, "Habilidad bloqueada", Toast.LENGTH_SHORT)
                         currentToast?.show()
                     } else {
-                        isCooldown = true
+                        yourCharacter.isCooldown = true
                         scope.launch {
-                            delay(timer * 1000)
-                            isCooldown = false
+                            delay(yourCharacter.timer * 1000)
+                            yourCharacter.isCooldown = false
                         }
-                        yourCharacter.money += (100 * yourCharacter.copilot)
+                        yourCharacter.money += (Random.nextInt(50, 101) * (yourCharacter.copilot - 1))
                         dataBase.updateMoney(yourCharacter.money)
                     }
                 }
@@ -155,7 +151,7 @@ fun ClickerScreen(yourCharacter: YourCharacter, dataBase: DataBase) {
             Icon(
                 painterResource(R.drawable.copilot),
                 "",
-                tint = if (yourCharacter.copilot == 1 || isCooldown) Color.Gray else Color.Black,
+                tint = if (yourCharacter.copilot == 1 || yourCharacter.isCooldown) Color.Gray else Color.Black,
                 modifier = Modifier
                     .align(Alignment.TopCenter)
                     .padding(7.dp)
@@ -173,16 +169,9 @@ fun ClickerScreen(yourCharacter: YourCharacter, dataBase: DataBase) {
                     )
                 )
             } else {
-                LaunchedEffect(isCooldown) {
-                    while (isCooldown && timer > 0) {
-                        delay(1000)
-                        timer--
-                    }
-                    timer = 60
-                }
-                if (isCooldown) {
+                if (yourCharacter.isCooldown) {
                     Text(
-                        text = "$timer",
+                        text = "${yourCharacter.timer}",
                         style = TextStyle(
                             fontFamily = quicksandFamily,
                             fontSize = 16.sp,

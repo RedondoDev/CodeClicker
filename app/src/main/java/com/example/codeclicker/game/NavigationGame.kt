@@ -46,6 +46,16 @@ fun NavigationGame(
         }
     }
 
+    LaunchedEffect(character.isCooldown) {
+        while (character.isCooldown && character.timer > 0) {
+            delay(1000)
+            character.timer--
+            dataBase.updateTimer(character.timer)
+        }
+        character.isCooldown = false
+        character.timer = 20
+    }
+
     Scaffold(modifier = Modifier.fillMaxSize(),
         topBar = { TopBar(character.name) },
         bottomBar = { BottomBar2(navController) }

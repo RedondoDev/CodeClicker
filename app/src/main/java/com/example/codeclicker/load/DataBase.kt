@@ -5,11 +5,7 @@ import android.util.Log
 import com.example.codeclicker.R
 import com.example.codeclicker.start.YourCharacter
 import com.google.firebase.Firebase
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
-import com.google.firebase.database.getValue
 import kotlinx.coroutines.tasks.await
 
 class DataBase(val activity: Activity, val userId: String) {
@@ -26,6 +22,10 @@ class DataBase(val activity: Activity, val userId: String) {
 
     fun updateClics(clics: Int) {
         dataBase.getReference("users/$userId/character").child("clics").setValue(clics)
+    }
+
+    fun updateTimer(timer: Long) {
+        dataBase.getReference("users/$userId/character").child("timer").setValue(timer)
     }
 
     fun updateCopilot(copilot: Int) {
