@@ -8,9 +8,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -68,6 +68,7 @@ fun RankingScreen(character: YourCharacter, dataBase: DataBase) {
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(Color(0xffcbd8e8))
             .padding(
                 top = 8.dp,
                 start = 25.dp,
@@ -80,8 +81,8 @@ fun RankingScreen(character: YourCharacter, dataBase: DataBase) {
             style = TextStyle(
                 fontFamily = quicksandFamily,
                 fontSize = 22.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color(0xFF3c6391)
+                fontWeight = FontWeight.Normal,
+                color = Color.Black
             ),
             textAlign = TextAlign.Center,
             modifier = Modifier
@@ -91,6 +92,11 @@ fun RankingScreen(character: YourCharacter, dataBase: DataBase) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
+                .clip(RoundedCornerShape(10.dp))
+                .background(
+                    Color.White,
+                    RoundedCornerShape(10.dp)
+                )
                 .border(
                     2.dp,
                     Color.Black,
@@ -103,7 +109,6 @@ fun RankingScreen(character: YourCharacter, dataBase: DataBase) {
                     name = players[index].first,
                     money = players[index].second,
                     isEven = index % 2 == 0,
-                    players = players
                 )
             }
         }
@@ -116,7 +121,6 @@ fun PlayerRow(
     name: String,
     money: String,
     isEven: Boolean,
-    players: SnapshotStateList<Pair<String, String>>
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -127,12 +131,7 @@ fun PlayerRow(
                     1 -> Color(0xFFFFC107).copy(0.5f)
                     2 -> Color(0xFFBDBDBD).copy(0.5f)
                     3 -> Color(0xFFA65C00).copy(0.5f)
-                    else -> if (isEven) Color(0xffcbd8e8) else Color(0xFFFFFFFF)
-                },
-                shape = when (top) {
-                    1 -> RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp)
-                    players.size -> RoundedCornerShape(bottomStart = 10.dp, bottomEnd = 10.dp)
-                    else -> RoundedCornerShape(0.dp)
+                    else -> if (isEven) Color(0xffcbd8e8).copy(0.6f) else Color(0xFFFFFFFF)
                 }
             )
             .padding(
