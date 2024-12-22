@@ -1,6 +1,7 @@
 package com.example.codeclicker.game
 
 import GithubScreen
+import RankingScreen
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size

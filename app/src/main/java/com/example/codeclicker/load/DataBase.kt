@@ -28,16 +28,17 @@ class DataBase(val activity: Activity, val userId: String) {
         dataBase.getReference("users/$userId/character").child("timer").setValue(timer)
     }
 
-    fun updateCopilot(copilot: Int) {
-        dataBase.getReference("users/$userId/character").child("copilot").setValue(copilot)
-    }
-
-    fun updateFunctions(functions: Int) {
-        dataBase.getReference("users/$userId/character").child("functions").setValue(functions)
-    }
-
-    fun updateBots(bots: Int) {
-        dataBase.getReference("users/$userId/character").child("bots").setValue(bots)
+    suspend fun getTop30CharactersByMoney(): ArrayList<YourCharacter> {
+        return try {
+            val snapshot = dataBase.getReference("users").get().await()
+            val characters = snapshot.children.mapNotNull {
+                it.child("character").getValue(YourCharacter::class.java)
+            }
+            ArrayList(characters.sortedByDescending { it.money }.take(30))
+        } catch (e: Exception) {
+            Log.e("DataBase", "Error getting top characters", e)
+            ArrayList()
+        }
     }
 
     suspend fun getCharacter(): YourCharacter? {
