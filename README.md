@@ -23,7 +23,6 @@ I hope you enjoy it.
 
 ## Table of Contents
 - [Images](#images)
-- [Video](#video)
 - [Technologies](#technologies)
 - [Assets](#assets)
 - [Author](#author)
@@ -32,12 +31,9 @@ I hope you enjoy it.
 ## Images
 | Splash Screen | Character Screen | Language Screen |
 |:---:|:---:|:---:|
-|<img src="https://github.com/user-attachments/assets/21528600-8b93-43f3-a938-a60af25a51e2" width="200"/>|<img src="https://github.com/user-attachments/assets/91d81f27-f961-43e3-b607-1461cf3dbf29" width="200"/>|<img src="https://github.com/user-attachments/assets/2d579645-c390-4b91-b1be-df807f127206" width="200"/>|
+|<img src="https://github.com/user-attachments/assets/74b88b92-630b-47b1-a741-ac4e13965546" width="300"/>|<img src="https://github.com/user-attachments/assets/37215ee5-97e2-4b58-9ef5-a9c685d0446b" width="300"/>|<img src="https://github.com/user-attachments/assets/9e18a029-1cb5-46a3-a408-fc9b94c0d3e7" width="300"/>|
 | Clicker Screen | Github Screen | Ranking Screen |
-|<img src="https://github.com/user-attachments/assets/2c24f3e9-aaba-42fd-ad84-3ddb26893af7" width="200"/>|![image](// add image)|![image](// add image)|
-
-## Video
-// add video
+|<img src="https://github.com/user-attachments/assets/ecc1b6b9-f9a6-4bbb-8835-2a3dd48bf748" width="300"/>|<img src="https://github.com/user-attachments/assets/91f34bbc-2971-4aab-b76f-ed4608290fb2" width="300"/>|<img src="https://github.com/user-attachments/assets/09801d73-e46e-4860-909d-bc417069cc8f" width="300"/>|
 
 ## Technologies
 <ul>
